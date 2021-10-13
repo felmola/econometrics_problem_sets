@@ -1,0 +1,707 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}14 Oct 2021, 01:46:52
+{txt}
+{com}. 
+. *###############################################################################
+. * 1. Question 1.
+. *###############################################################################
+. *===============================================================================
+. * 1.1. Generate sample from the random variables and its population parameters.
+. *===============================================================================
+. set obs 100 // Set the number of  observations for the random sample.
+{txt}{p}
+Number of observations ({bf:_N}) was 0,
+now 100.
+{p_end}
+
+{com}. set seed 1015 // Set the seed for the pseudo-random number generator.
+{txt}
+{com}. 
+. matrix means = (10,15,15,10) //Vector of means for the drawnorm().
+{txt}
+{com}. matrix varcov = (1,0.6,0,0.2\0.6,1,0,0.3\0,0,1,0\0.2,0.3,0,1) //Matrix of var-cov for the drawnorm().
+{txt}
+{com}. matrix list means // Displays a matrix.
+{res}
+{txt}means[1,4]
+    c1  c2  c3  c4
+r1 {res} 10  15  15  10
+{reset}
+{com}. matrix list varcov
+{res}
+{txt}symmetric varcov[4,4]
+    c1  c2  c3  c4
+r1 {res}  1
+{txt}r2 {res} .6   1
+{txt}r3 {res}  0   0   1
+{txt}r4 {res} .2  .3   0   1
+{reset}
+{com}. 
+. drawnorm y x1 x2 x3, cov(varcov) means(means) //Generates a sample of the random variables with the specified parameters.
+{txt}
+{com}. list y in 1/10
+{txt}
+     {c TLC}{hline 10}{c TRC}
+     {c |} {res}       y {txt}{c |}
+     {c LT}{hline 10}{c RT}
+  1. {c |} {res}9.703876 {txt}{c |}
+  2. {c |} {res}9.624805 {txt}{c |}
+  3. {c |} {res}8.257296 {txt}{c |}
+  4. {c |} {res}7.851505 {txt}{c |}
+  5. {c |} {res}9.348859 {txt}{c |}
+     {c LT}{hline 10}{c RT}
+  6. {c |} {res}9.059323 {txt}{c |}
+  7. {c |} {res}10.47427 {txt}{c |}
+  8. {c |} {res}10.64235 {txt}{c |}
+  9. {c |} {res}8.040435 {txt}{c |}
+ 10. {c |} {res}10.34571 {txt}{c |}
+     {c BLC}{hline 10}{c BRC}
+
+{com}. summarize // Calculate mean and sd for the data.
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 11}y {c |}{res}        100     9.83153     .990959   7.156042   12.93186
+{txt}{space 10}x1 {c |}{res}        100    14.77765    .9627169   12.82143   17.81787
+{txt}{space 10}x2 {c |}{res}        100    15.01672    .9772178   12.76052   17.20855
+{txt}{space 10}x3 {c |}{res}        100    9.938679    1.097261   7.359324   12.43131
+{txt}
+{com}. 
+. gen constant = 1
+{txt}
+{com}. 
+. mata
+{txt}{hline 49} mata (type {cmd:end} to exit) {hline}
+{com}: 
+: //------------------------------------------------------------------------------
+: // 1.1.a. Generate population values of the coefficients of X.
+: //------------------------------------------------------------------------------
+: //----- Calculate the vector of coeficcients for X.
+: 
+: means = (10,15,15,10)' //Vector of means for the drawnorm().
+{res}
+{com}: varcov = (1,0.6,0,0.2\0.6,1,0,0.3\0,0,1,0\0.2,0.3,0,1) //Matrix of var-cov for the drawnorm().
+{res}
+{com}: means
+{res}       {txt} 1
+    {c TLC}{hline 6}{c TRC}
+  1 {c |}  {res}10{txt}  {c |}
+  2 {c |}  {res}15{txt}  {c |}
+  3 {c |}  {res}15{txt}  {c |}
+  4 {c |}  {res}10{txt}  {c |}
+    {c BLC}{hline 6}{c BRC}
+
+{com}: varcov
+{res}{txt}[symmetric]
+        1    2    3    4
+    {c TLC}{hline 21}{c TRC}
+  1 {c |}  {res} 1               {txt}  {c |}
+  2 {c |}  {res}.6    1          {txt}  {c |}
+  3 {c |}  {res} 0    0    1     {txt}  {c |}
+  4 {c |}  {res}.2   .3    0    1{txt}  {c |}
+    {c BLC}{hline 21}{c BRC}
+
+{com}: 
+: varcov_x = varcov[2..4,2..4]
+{res}
+{com}: varcov_x
+{res}{txt}[symmetric]
+        1    2    3
+    {c TLC}{hline 16}{c TRC}
+  1 {c |}  {res} 1          {txt}  {c |}
+  2 {c |}  {res} 0    1     {txt}  {c |}
+  3 {c |}  {res}.3    0    1{txt}  {c |}
+    {c BLC}{hline 16}{c BRC}
+
+{com}: 
+: cov_y = (varcov[1,2],varcov[1,3],varcov[1,4])'
+{res}
+{com}: cov_y
+{res}       {txt} 1
+    {c TLC}{hline 6}{c TRC}
+  1 {c |}  {res}.6{txt}  {c |}
+  2 {c |}  {res} 0{txt}  {c |}
+  3 {c |}  {res}.2{txt}  {c |}
+    {c BLC}{hline 6}{c BRC}
+
+{com}: 
+: beta = invsym(varcov_x) * (cov_y)
+{res}
+{com}: beta
+{res}       {txt}          1
+    {c TLC}{hline 15}{c TRC}
+  1 {c |}  {res}.5934065934{txt}  {c |}
+  2 {c |}  {res}          0{txt}  {c |}
+  3 {c |}  {res} .021978022{txt}  {c |}
+    {c BLC}{hline 15}{c BRC}
+
+{com}: 
+: //----- Calculate B0.
+: 
+: mean_x = (15,15,10)'
+{res}
+{com}: mean_x
+{res}       {txt} 1
+    {c TLC}{hline 6}{c TRC}
+  1 {c |}  {res}15{txt}  {c |}
+  2 {c |}  {res}15{txt}  {c |}
+  3 {c |}  {res}10{txt}  {c |}
+    {c BLC}{hline 6}{c BRC}
+
+{com}: 
+: beta_0 = 10 - (mean_x'*beta)
+{res}
+{com}: beta_0
+{res}  .8791208791
+
+{com}: 
+: //------------------------------------------------------------------------------
+: // 1.1.b. Interpretation of B1.
+: //------------------------------------------------------------------------------
+: 
+: // b1 is the marginal effect of the regresor x1 on the expected valuer of y. 
+: // Since b1=0, the marginal effecct of x1 on y is zero.
+: 
+: //------------------------------------------------------------------------------
+: // 1.1.c. OLS Estimator.
+: //------------------------------------------------------------------------------
+: 
+: st_view(y=.,.,"y")
+{res}
+{com}: st_view(x=.,.,("x1","x2","x3","constant"))
+{res}
+{com}: 
+: beta_hat=invsym(x'x)*(x'y)
+{res}
+{com}: beta_hat
+{res}       {txt}           1
+    {c TLC}{hline 16}{c TRC}
+  1 {c |}  {res} .6141202149{txt}  {c |}
+  2 {c |}  {res} .0337280483{txt}  {c |}
+  3 {c |}  {res} .1213489504{txt}  {c |}
+  4 {c |}  {res}-.9562587499{txt}  {c |}
+    {c BLC}{hline 16}{c BRC}
+
+{com}: 
+: //------------------------------------------------------------------------------
+: // 1.1.d. SST, SSE, SSR.
+: //------------------------------------------------------------------------------
+: 
+: st_view(y=.,.,"y")
+{res}
+{com}: st_view(x=.,.,("x1","x2","x3","constant"))
+{res}
+{com}: 
+: mean_vector_y = J(rows(y),1,mean(y))
+{res}
+{com}: //mean_vector_y
+: sst = (y-mean_vector_y)'(y-mean_vector_y)
+{res}
+{com}: sst
+{res}  97.21797076
+
+{com}: 
+: vector_y_hat = x * beta_hat
+{res}
+{com}: //vector_y_hat
+: sse = (vector_y_hat - mean_vector_y)'(vector_y_hat - mean_vector_y)
+{res}
+{com}: sse
+{res}  44.52903988
+
+{com}: 
+: vector_u_hat = y - vector_y_hat
+{res}
+{com}: //vector_u_hat
+: ssr = (vector_u_hat)'(vector_u_hat)
+{res}
+{com}: ssr
+{res}  52.68893088
+
+{com}: 
+: sst
+{res}  97.21797076
+
+{com}: sse + ssr
+{res}  97.21797076
+
+{com}: 
+: //------------------------------------------------------------------------------
+: // 1.1.e. r2 and adjusted r2.
+: //------------------------------------------------------------------------------
+: 
+: r_squared = sse/sst
+{res}
+{com}: r_squared
+{res}  .4580330111
+
+{com}: 
+: adjusted_r_squared = 1 - ((ssr / (rows(x) - cols(x))) / (sst / (rows(x) - 1)))
+{res}
+{com}: adjusted_r_squared
+{res}  .4410965427
+
+{com}: 
+: //------------------------------------------------------------------------------
+: // 1.1.f. OLS residuals and fitted values of y.
+: //------------------------------------------------------------------------------
+: 
+: //vector_y_hat
+: 
+: //vector_u_hat
+: 
+: //------------------------------------------------------------------------------
+: // 1.1.g. Sample average of the OLS residuals and sample covariance between 
+: /// regressors and the residuals.
+> //------------------------------------------------------------------------------
+: 
+: mean_vector_u_hat = mean(vector_u_hat)
+{res}
+{com}: mean_vector_u_hat
+{res}  -3.88471e-13
+
+{com}: 
+: cov_xu_hat = ((1 / rows(y)) * x'vector_u_hat) - (mean(x)'mean_vector_u_hat)
+{res}
+{com}: 
+: cov_xu_hat
+{res}       {txt}           1
+    {c TLC}{hline 16}{c TRC}
+  1 {c |}  {res}-1.81719e-13{txt}  {c |}
+  2 {c |}  {res}-7.59680e-14{txt}  {c |}
+  3 {c |}  {res} 3.56892e-14{txt}  {c |}
+  4 {c |}  {res}-1.29063e-17{txt}  {c |}
+    {c BLC}{hline 16}{c BRC}
+
+{com}: 
+: // Comment: The mean of the residuals and the covariance between the residuals and the 
+: // regressors is virtually zero.
+: 
+: //------------------------------------------------------------------------------
+: // 1.1.h. Comparison betweenthe average fitted value of y and the average value
+: /// of y.
+> //------------------------------------------------------------------------------
+: 
+: mean_y = mean(y)
+{res}
+{com}: 
+: mean_vector_y_hat = mean(vector_y_hat)
+{res}
+{com}: 
+: mean_vector_y_hat - mean_y
+{res}  3.89022e-13
+
+{com}: 
+: // A summary of the key values to compare with the OLS regression output.
+: 
+: beta_hat
+{res}       {txt}           1
+    {c TLC}{hline 16}{c TRC}
+  1 {c |}  {res} .6141202149{txt}  {c |}
+  2 {c |}  {res} .0337280483{txt}  {c |}
+  3 {c |}  {res} .1213489504{txt}  {c |}
+  4 {c |}  {res}-.9562587499{txt}  {c |}
+    {c BLC}{hline 16}{c BRC}
+
+{com}: sst
+{res}  97.21797076
+
+{com}: sse
+{res}  44.52903988
+
+{com}: ssr
+{res}  52.68893088
+
+{com}: r_squared
+{res}  .4580330111
+
+{com}: adjusted_r_squared
+{res}  .4410965427
+
+{com}: 
+: end
+{txt}{hline}
+
+{com}. 
+. *===============================================================================
+. * 1.2. OLS regression in STATA and comparison with results from MATA.
+. *===============================================================================
+. 
+. reg y x*
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       100
+{txt}{hline 13}{c +}{hline 34}   F(3, 96)        = {res}    27.04
+{txt}       Model {c |} {res} 44.5290399         3  14.8430133   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 52.6889309        96   .54884303   {txt}R-squared       ={res}    0.4580
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4411
+{txt}       Total {c |} {res} 97.2179708        99  .981999705   {txt}Root MSE        =   {res} .74084
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           y{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} .6141202{col 26}{space 2} .0893371{col 37}{space 1}    6.87{col 46}{space 3}0.000{col 54}{space 4} .4367875{col 67}{space 3} .7914529
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}  .033728{col 26}{space 2} .0763631{col 37}{space 1}    0.44{col 46}{space 3}0.660{col 54}{space 4}-.1178514{col 67}{space 3} .1853075
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2}  .121349{col 26}{space 2} .0782833{col 37}{space 1}    1.55{col 46}{space 3}0.124{col 54}{space 4}-.0340421{col 67}{space 3}   .27674
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.9562587{col 26}{space 2} 1.572035{col 37}{space 1}   -0.61{col 46}{space 3}0.544{col 54}{space 4}-4.076724{col 67}{space 3} 2.164206
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. corr y x*
+{txt}(obs=100)
+
+             {c |}        y       x1       x2       x3
+{hline 13}{c +}{hline 36}
+           y {c |}{res}   1.0000
+          {txt}x1 {c |}{res}   0.6658   1.0000
+          {txt}x2 {c |}{res}   0.0782   0.0658   1.0000
+          {txt}x3 {c |}{res}   0.4332   0.4985   0.0424   1.0000
+
+{txt}
+{com}. // The results are exactly the same.
+. 
+. *===============================================================================
+. * 1.3. 1000 random samples from the joint distribution above.
+. *===============================================================================
+. 
+. capture program drop random_sample 
+{txt}
+{com}. 
+. program define random_sample, rclass // Define the name of the program.
+{txt}  1{com}.         drop _all
+{txt}  2{com}.         scalar drop _all
+{txt}  3{com}.         matrix drop _all
+{txt}  4{com}.         set more off
+{txt}  5{com}.         set obs 100 // Set the number of observations in the sample.
+{txt}  6{com}.         matrix varcov = (1,0.6,0,0.2\0.6,1,0,0.3\0,0,1,0\0.2,0.3,0,1) //
+{txt}  7{com}.         matrix  means = (10,15,15,10)'    //Vector of means for the drawnorm().
+{txt}  8{com}.         drawnorm y x1 x2 x3, cov(varcov) means(means)
+{txt}  9{com}. 
+.         reg y x1 x2 x3 
+{txt} 10{com}.         // Store regression coefficients in r() in order to return them in the simulation
+.         return scalar beta_0 = _b[_cons]  //_b[namevariable]
+{txt} 11{com}.         return scalar beta_1 = _b[x1]
+{txt} 12{com}.     return scalar beta_2 = _b[x2]
+{txt} 13{com}.         return scalar beta_3 = _b[x3]
+{txt} 14{com}.         // End of program 
+. end
+{txt}
+{com}. 
+. *-------------------------------------------------------------------------------
+. * 1.3.a. Estimation of parameters from 1000 replications.
+. *-------------------------------------------------------------------------------
+. 
+. simulate ///
+> beta_0_hat = r(beta_0) ///
+> beta_1_hat = r(beta_1)  ///
+> beta_2_hat = r(beta_2) ///
+> beta_3_hat = r(beta_3), reps(1000)  ///
+> saving(0_data\coefficient_estimators, replace) seed(1015): random_sample
+{res}{p2colset 7 16 20 2}{...}
+
+{txt}{p2col :Command:}{res:random_sample}{p_end}
+{p2colset 4 16 20 2}{...}
+{p2col :beta_0_hat:}{res:r(beta_0)}{p_end}
+{p2colset 4 16 20 2}{...}
+{p2col :beta_1_hat:}{res:r(beta_1)}{p_end}
+{p2colset 4 16 20 2}{...}
+{p2col :beta_2_hat:}{res:r(beta_2)}{p_end}
+{p2colset 4 16 20 2}{...}
+{p2col :beta_3_hat:}{res:r(beta_3)}{p_end}
+
+Simulations ({res}1,000{txt})
+{hline 4}{c +}{hline 3} 1 {hline 3}{c +}{hline 3} 2 {hline 3}{c +}{hline 3} 3 {hline 3}{c +}{hline 3} 4 {hline 3}{c +}{hline 3} 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+.................................................. 1,000
+
+{com}. 
+. *-------------------------------------------------------------------------------
+. * 1.3.b. Unbiasness of the estimators of beta (against parameter beta).
+. *-------------------------------------------------------------------------------
+. 
+. egen mean_beta_0_hat = mean(beta_0_hat)
+{txt}
+{com}. egen mean_beta_1_hat = mean(beta_1_hat)
+{txt}
+{com}. egen mean_beta_2_hat = mean(beta_2_hat)
+{txt}
+{com}. egen mean_beta_3_hat = mean(beta_3_hat)
+{txt}
+{com}. 
+. gen diff_b_0 = beta_0_hat - mean_beta_0_hat
+{txt}
+{com}. gen diff_b_1 = beta_1_hat - mean_beta_1_hat
+{txt}
+{com}. gen diff_b_2 = beta_2_hat - mean_beta_2_hat
+{txt}
+{com}. gen diff_b_3 = beta_3_hat - mean_beta_3_hat
+{txt}
+{com}. 
+. foreach var in beta_0_hat beta_1_hat beta_2_hat beta_3_hat{c -(}
+{txt}  2{com}. summarize `var'
+{txt}  3{com}. {c )-}
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_0_hat {c |}{res}      1,000    .8302528    1.838884  -4.651379   5.667601
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_1_hat {c |}{res}      1,000    .5962717    .0876936   .1954905   .9266147
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_2_hat {c |}{res}      1,000    .0033474    .0819166  -.2419794   .2505844
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_3_hat {c |}{res}      1,000    .0176864    .0868876  -.2672546   .3348112
+{txt}
+{com}. 
+. foreach var in diff_b_0 diff_b_1 diff_b_2 diff_b_3{c -(}
+{txt}  2{com}. summarize `var'
+{txt}  3{com}. {c )-}
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}diff_b_0 {c |}{res}      1,000   -1.31e-08    1.838884  -5.481631   4.837348
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}diff_b_1 {c |}{res}      1,000    3.81e-09    .0876936  -.4007812    .330343
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}diff_b_2 {c |}{res}      1,000   -7.69e-10    .0819166  -.2453268    .247237
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}diff_b_3 {c |}{res}      1,000   -1.45e-09    .0868876   -.284941   .3171248
+{txt}
+{com}. 
+. *-------------------------------------------------------------------------------
+. * 1.3.c. beta_hat distribution plots
+. *-------------------------------------------------------------------------------
+. 
+. foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{c -(}
+{txt}  2{com}.         histogram `var', normal name(`var', replace)
+{txt}  3{com}.         local graphnames `graphnames' `var'
+{txt}  4{com}. {c )-}
+{txt}(bin={res}29{txt}, start={res}-4.6513786{txt}, width={res}.35582689{txt})
+{res}{txt}(bin={res}29{txt}, start={res}.19549048{txt}, width={res}.02521118{txt})
+{res}{txt}(bin={res}29{txt}, start={res}-.24197945{txt}, width={res}.01698496{txt})
+{res}{txt}(bin={res}29{txt}, start={res}-.26725462{txt}, width={res}.02076089{txt})
+{res}{txt}
+{com}. 
+. graph combine `graphnames'
+{res}{txt}
+{com}. graph save 3_graphs\betas.gph, replace
+{res}{txt}file {bf:3_graphs\betas.gph} saved
+
+{com}. 
+. //Comment: They look pretty normal, no pun intended.
+. 
+. *###############################################################################
+. * 2. Question 2.
+. *###############################################################################
+. *===============================================================================
+. * 2.1. Load dataset in STATA and MATA and calculate the regression model in MATA.
+. *===============================================================================
+. clear all
+{res}{txt}
+{com}. use 0_data\ps1_group15
+{txt}
+{com}. 
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}workedm {c |}{res}    322,542    .5656597    .4956708          0          1
+{txt}{space 5}weeksm1 {c |}{res}    322,542    20.84158    22.28615          0         52
+{txt}{space 5}hourswm {c |}{res}    322,542    18.80672    18.91383          0         99
+{txt}{space 5}incomem {c |}{res}    322,542    7168.956    10839.99          0     260308
+{txt}{space 4}kidcount {c |}{res}    322,542    2.553159    .8104265          2         12
+{txt}{hline 13}{c +}{hline 57}
+twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
+{txt}{space 4}same_sex {c |}{res}    322,542    .5053233    .4999724          0          1
+{txt}{space 4}morekids {c |}{res}    322,542    .4022949    .4903616          0          1
+{txt}{space 6}blackm {c |}{res}    322,542    .1191783    .3239987          0          1
+{txt}{space 7}hispm {c |}{res}    322,542    .0302472    .1712671          0          1
+{txt}{hline 13}{c +}{hline 57}
+{space 4}othracem {c |}{res}    322,542    .0288366    .1673472          0          1
+{txt}{space 7}educm {c |}{res}    322,542    12.12603    2.402849          0         20
+{txt}{space 7}agem1 {c |}{res}    322,542    30.12355    3.506812         21         35
+{txt}{space 5}agefstm {c |}{res}    322,542    20.13954    2.950454         15         33
+{txt}
+{com}. 
+. gen constant = 1
+{txt}
+{com}. mata
+{txt}{hline 49} mata (type {cmd:end} to exit) {hline}
+{com}: 
+: st_view(y = .,.,"hourswm")
+{res}
+{com}: st_view(x = .,.,("morekids","educm","agefstm","blackm","hispm","othracem","agem1","constant"))
+{res}
+{com}: 
+: beta = invsym(x'x) * (x'y)
+{res}
+{com}: beta
+{res}       {txt}           1
+    {c TLC}{hline 16}{c TRC}
+  1 {c |}  {res}-6.374661875{txt}  {c |}
+  2 {c |}  {res} .7717738957{txt}  {c |}
+  3 {c |}  {res} -1.60535276{txt}  {c |}
+  4 {c |}  {res} 5.431590302{txt}  {c |}
+  5 {c |}  {res} 2.491738478{txt}  {c |}
+  6 {c |}  {res} 4.365351396{txt}  {c |}
+  7 {c |}  {res} .8708522197{txt}  {c |}
+  8 {c |}  {res} 17.26199847{txt}  {c |}
+    {c BLC}{hline 16}{c BRC}
+
+{com}: 
+: // I cannot compute the partitioned regression in mata because of the inability
+: // to create an identity matrix of dimension = n (Insuficiente memory).
+: 
+: end
+{txt}{hline}
+
+{com}. 
+. *===============================================================================
+. * 2.2. Calculate the regression model in STATA and compare it with the one
+. * obtained in MATA.
+. *===============================================================================
+. 
+. 
+. // The results are the same.
+. 
+. *===============================================================================
+. * 2.3.a. 
+. *===============================================================================
+. cls
+{txt}
+{com}. //----- First, regress x1 onto the other regressors (without x2), and save the
+. // residuals.
+. reg morekids agem1 agefstm blackm hispm othracem  
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(5, 322536)    = {res}  5620.07
+{txt}       Model {c |} {res}  6215.4505         5   1243.0901   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 71340.9708   322,536  .221187622   {txt}R-squared       ={res}    0.0801
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0801
+{txt}       Total {c |} {res} 77556.4213   322,541  .240454458   {txt}Root MSE        =   {res} .47031
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    morekids{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}agem1 {c |}{col 14}{res}{space 2} .0300732{col 26}{space 2} .0002591{col 37}{space 1}  116.08{col 46}{space 3}0.000{col 54}{space 4} .0295654{col 67}{space 3} .0305809
+{txt}{space 5}agefstm {c |}{col 14}{res}{space 2}-.0451706{col 26}{space 2} .0003125{col 37}{space 1} -144.53{col 46}{space 3}0.000{col 54}{space 4}-.0457832{col 67}{space 3} -.044558
+{txt}{space 6}blackm {c |}{col 14}{res}{space 2} .0718813{col 26}{space 2} .0026178{col 37}{space 1}   27.46{col 46}{space 3}0.000{col 54}{space 4} .0667505{col 67}{space 3} .0770122
+{txt}{space 7}hispm {c |}{col 14}{res}{space 2} .1571145{col 26}{space 2} .0048608{col 37}{space 1}   32.32{col 46}{space 3}0.000{col 54}{space 4} .1475874{col 67}{space 3} .1666415
+{txt}{space 4}othracem {c |}{col 14}{res}{space 2} .0732152{col 26}{space 2} .0049651{col 37}{space 1}   14.75{col 46}{space 3}0.000{col 54}{space 4} .0634837{col 67}{space 3} .0829467
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .3906699{col 26}{space 2} .0079511{col 37}{space 1}   49.13{col 46}{space 3}0.000{col 54}{space 4} .3750859{col 67}{space 3} .4062539
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict residuals_1, residuals
+{txt}
+{com}. 
+. //----- Second, regress x2 onto the other regressors (without x1), and save the
+. // residuals.
+. reg educm agem1 agefstm blackm hispm othracem  
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(5, 322536)    = {res} 17277.86
+{txt}       Model {c |} {res} 393417.841         5  78683.5682   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 1468832.29   322,536  4.55401037   {txt}R-squared       ={res}    0.2113
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2112
+{txt}       Total {c |} {res} 1862250.13   322,541  5.77368498   {txt}Root MSE        =   {res}  2.134
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       educm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}agem1 {c |}{col 14}{res}{space 2} .0219985{col 26}{space 2} .0011755{col 37}{space 1}   18.71{col 46}{space 3}0.000{col 54}{space 4} .0196944{col 67}{space 3} .0243025
+{txt}{space 5}agefstm {c |}{col 14}{res}{space 2} .3328485{col 26}{space 2} .0014182{col 37}{space 1}  234.70{col 46}{space 3}0.000{col 54}{space 4}  .330069{col 67}{space 3} .3356281
+{txt}{space 6}blackm {c |}{col 14}{res}{space 2} .2129144{col 26}{space 2} .0118783{col 37}{space 1}   17.92{col 46}{space 3}0.000{col 54}{space 4} .1896332{col 67}{space 3} .2361957
+{txt}{space 7}hispm {c |}{col 14}{res}{space 2}-2.395421{col 26}{space 2} .0220559{col 37}{space 1} -108.61{col 46}{space 3}0.000{col 54}{space 4} -2.43865{col 67}{space 3}-2.352192
+{txt}{space 4}othracem {c |}{col 14}{res}{space 2}-.5349202{col 26}{space 2} .0225293{col 37}{space 1}  -23.74{col 46}{space 3}0.000{col 54}{space 4}-.5790769{col 67}{space 3}-.4907634
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.822442{col 26}{space 2} .0360783{col 37}{space 1}  133.67{col 46}{space 3}0.000{col 54}{space 4}  4.75173{col 67}{space 3} 4.893155
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict residuals_2, residuals
+{txt}
+{com}. 
+. //----- Third, regress y onto both residuals and compare the results with the
+. // full model.
+. reg hourswm residuals_1 residuals_2
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(2, 322539)    = {res}  5848.04
+{txt}       Model {c |} {res} 4037682.84         2  2018841.42   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  111345859   322,539   345.21673   {txt}R-squared       ={res}    0.0350
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0350
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res}  18.58
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}residuals_1 {c |}{col 14}{res}{space 2}-6.374662{col 26}{space 2} .0698024{col 37}{space 1}  -91.32{col 46}{space 3}0.000{col 54}{space 4}-6.511473{col 67}{space 3}-6.237851
+{txt}{space 1}residuals_2 {c |}{col 14}{res}{space 2} .7717739{col 26}{space 2} .0153835{col 37}{space 1}   50.17{col 46}{space 3}0.000{col 54}{space 4} .7416228{col 67}{space 3}  .801925
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 18.80672{col 26}{space 2} .0327154{col 37}{space 1}  574.86{col 46}{space 3}0.000{col 54}{space 4}  18.7426{col 67}{space 3} 18.87084
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(7, 322534)    = {res}  3626.21
+{txt}       Model {c |} {res}  8418182.8         7  1202597.54   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  106965359   322,534  331.640568   {txt}R-squared       ={res}    0.0730
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0729
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res} 18.211
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}morekids {c |}{col 14}{res}{space 2}-6.374662{col 26}{space 2} .0684161{col 37}{space 1}  -93.17{col 46}{space 3}0.000{col 54}{space 4}-6.508756{col 67}{space 3}-6.240568
+{txt}{space 7}educm {c |}{col 14}{res}{space 2} .7717739{col 26}{space 2} .0150779{col 37}{space 1}   51.19{col 46}{space 3}0.000{col 54}{space 4} .7422216{col 67}{space 3} .8013262
+{txt}{space 7}agem1 {c |}{col 14}{res}{space 2} .8708522{col 26}{space 2} .0102514{col 37}{space 1}   84.95{col 46}{space 3}0.000{col 54}{space 4} .8507597{col 67}{space 3} .8909447
+{txt}{space 5}agefstm {c |}{col 14}{res}{space 2}-1.605353{col 26}{space 2} .0133654{col 37}{space 1} -120.11{col 46}{space 3}0.000{col 54}{space 4}-1.631548{col 67}{space 3}-1.579157
+{txt}{space 6}blackm {c |}{col 14}{res}{space 2}  5.43159{col 26}{space 2}  .101549{col 37}{space 1}   53.49{col 46}{space 3}0.000{col 54}{space 4} 5.232557{col 67}{space 3} 5.630623
+{txt}{space 7}hispm {c |}{col 14}{res}{space 2} 2.491738{col 26}{space 2} .1917857{col 37}{space 1}   12.99{col 46}{space 3}0.000{col 54}{space 4} 2.115844{col 67}{space 3} 2.867633
+{txt}{space 4}othracem {c |}{col 14}{res}{space 2} 4.365351{col 26}{space 2} .1924748{col 37}{space 1}   22.68{col 46}{space 3}0.000{col 54}{space 4} 3.988106{col 67}{space 3} 4.742597
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}   17.262{col 26}{space 2} .3179841{col 37}{space 1}   54.29{col 46}{space 3}0.000{col 54}{space 4} 16.63876{col 67}{space 3} 17.88524
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *###############################################################################
+. * n. Close log.
+. *###############################################################################
+. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}14 Oct 2021, 01:47:06
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

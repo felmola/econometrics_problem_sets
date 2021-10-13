@@ -1,9 +1,11 @@
 *###############################################################################
-* 0. Set working directory.
+* 0. Set working directory and log.
 *###############################################################################
 clear all
 set more off
 dir "A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1"
+
+log using 2_log\log, replace
 
 *###############################################################################
 * 1. Question 1.
@@ -79,17 +81,17 @@ st_view(y=.,.,"y")
 st_view(x=.,.,("x1","x2","x3","constant"))
 
 mean_vector_y = J(rows(y),1,mean(y))
-mean_vector_y
+//mean_vector_y
 sst = (y-mean_vector_y)'(y-mean_vector_y)
 sst
 
 vector_y_hat = x * beta_hat
-vector_y_hat
+//vector_y_hat
 sse = (vector_y_hat - mean_vector_y)'(vector_y_hat - mean_vector_y)
 sse
 
 vector_u_hat = y - vector_y_hat
-vector_u_hat
+//vector_u_hat
 ssr = (vector_u_hat)'(vector_u_hat)
 ssr
 
@@ -110,9 +112,9 @@ adjusted_r_squared
 // 1.1.f. OLS residuals and fitted values of y.
 //------------------------------------------------------------------------------
 
-vector_y_hat
+//vector_y_hat
 
-vector_u_hat
+//vector_u_hat
 
 //------------------------------------------------------------------------------
 // 1.1.g. Sample average of the OLS residuals and sample covariance between 
@@ -125,7 +127,7 @@ mean_vector_u_hat
 cov_xu_hat = x'vector_u_hat
 cov_xu_hat
 
-// TODO: The mean of the residuals and the covariance between the residuals and the 
+// Comment: The mean of the residuals and the covariance between the residuals and the 
 // regressors is virtually zero.
 
 //------------------------------------------------------------------------------
@@ -228,7 +230,7 @@ foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{
 graph combine `graphnames'
 graph save 3_graphs\betas.gph, replace
 
-//TODO: Comment: They look pretty normal, no pun intended.
+//Comment: They look pretty normal, no pun intended.
 
 *###############################################################################
 * 2. Question 2.
@@ -242,11 +244,10 @@ use 0_data\ps1_group15
 summarize
 
 gen constant = 1
-//TODO: Compute estimators in mata using regression sub-vectors.
 mata
 
 st_view(y = .,.,"hourswm")
-st_view(x = .,.,("morekids","agem1","agefstm","blackm","hispm","othracem","educm","constant"))
+st_view(x = .,.,("morekids","educm","agefstm","blackm","hispm","othracem","agem1","constant"))
 
 beta = invsym(x'x) * (x'y)
 beta
@@ -284,41 +285,11 @@ reg hourswm residuals_1 residuals_2
 
 reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
 
+*###############################################################################
+* n. Close log.
+*###############################################################################
 
+log close
+translate 2_log\log.smcl 2_log\log.pdf, replace
 
-//TODO: Activate the log.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*###############################################################################
