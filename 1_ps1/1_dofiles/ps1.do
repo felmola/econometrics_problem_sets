@@ -226,7 +226,7 @@ foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{
 }
 
 graph combine `graphnames'
-graph save 3_graphs\betas.gph
+graph save 3_graphs\betas.gph, replace
 
 //TODO: Comment: They look pretty normal, no pun intended.
 
@@ -242,19 +242,17 @@ use 0_data\ps1_group15
 summarize
 
 gen constant = 1
-
+//TODO: Compute estimators in mata using regression sub-vectors.
 mata
 
-st_view(y=.,.,"hourswm")
-st_view(x1=.,.,"morekids")
-st_view(x2=.,.,("agem1","agefstm","blackm","hispm","othracem","educm"))
+st_view(y = .,.,"hourswm")
+st_view(x = .,.,("morekids","agem1","agefstm","blackm","hispm","othracem","educm","constant"))
 
-beta_1 = invsym(x1'x1)*(x1'y)
-beta_2 = invsym(x2'x2)*(x2'y)
+beta = invsym(x'x) * (x'y)
+beta
 
-beta_0
-beta_1
-beta_2
+// I cannot compute the partitioned regression in mata because of the inability
+// to create an identity matrix of dimension = n (Insuficiente memory).
 
 end
 
@@ -263,17 +261,26 @@ end
 * obtained in MATA.
 *===============================================================================
 
-reg hourswm morekids agem1 agefstm blackm hispm othracem educm
 
 // The results are the same.
 
 *===============================================================================
 * 2.3.a. 
 *===============================================================================
+cls
 
+reg hourswm morekids 
+predict residuals_0, residuals
 
+reg morekids educm agem1 agefstm blackm hispm othracem
+predict residuals_morekids, residuals
 
+//reg educm morekids agem1 agefstm blackm hispm othracem
+//redict residuals_educm, residuals
 
+reg residuals_0 residuals_morekids 
+
+reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
 
 
 
