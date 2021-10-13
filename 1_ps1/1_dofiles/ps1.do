@@ -268,20 +268,21 @@ end
 * 2.3.a. 
 *===============================================================================
 cls
+//----- First, regress x1 onto the other regressors (without x2), and save the
+// residuals.
+reg morekids agem1 agefstm blackm hispm othracem  
+predict residuals_1, residuals
 
-reg hourswm morekids 
-predict residuals_0, residuals
+//----- Second, regress x2 onto the other regressors (without x1), and save the
+// residuals.
+reg educm agem1 agefstm blackm hispm othracem  
+predict residuals_2, residuals
 
-reg morekids educm agem1 agefstm blackm hispm othracem
-predict residuals_morekids, residuals
-
-//reg educm morekids agem1 agefstm blackm hispm othracem
-//redict residuals_educm, residuals
-
-reg residuals_0 residuals_morekids 
+//----- Third, regress y onto both residuals and compare the results with the
+// full model.
+reg hourswm residuals_1 residuals_2
 
 reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
-
 
 
 
