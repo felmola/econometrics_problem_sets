@@ -58,8 +58,8 @@ beta_0
 // 1.1.b. Interpretation of B1.
 //------------------------------------------------------------------------------
 
-// b1 is the marginal effect of the regresor x1 on y. Since b1=0, the marginal 
-//effecct of x1 on y is zero.
+// b1 is the marginal effect of the regresor x1 on the expected valuer of y. 
+// Since b1=0, the marginal effecct of x1 on y is zero.
 
 //------------------------------------------------------------------------------
 // 1.1.c. OLS Estimator.
@@ -221,7 +221,7 @@ summarize `var'
 *-------------------------------------------------------------------------------
 
 foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{
-	histogram `var', name(`var', replace)
+	histogram `var', normal name(`var', replace)
 	local graphnames `graphnames' `var'
 }
 
@@ -246,11 +246,9 @@ gen constant = 1
 mata
 
 st_view(y=.,.,"hourswm")
-st_view(x0=.,.,"constant")
-st_view(x1=.,.,("morekids"))
+st_view(x1=.,.,"morekids")
 st_view(x2=.,.,("agem1","agefstm","blackm","hispm","othracem","educm"))
 
-beta_0 = invsym(x0'x0)*(x0'y)
 beta_1 = invsym(x1'x1)*(x1'y)
 beta_2 = invsym(x2'x2)*(x2'y)
 
