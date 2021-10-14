@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}14 Oct 2021, 19:31:16
+ {txt}opened on:  {res}14 Oct 2021, 20:31:07
 {txt}
 {com}. 
 . *###############################################################################
@@ -258,18 +258,19 @@ r1 {res}  1
 {res}  -3.88471e-13
 
 {com}: 
-: cov_xu_hat = x'vector_u_hat
+: cov_xu_hat = (1 / cols(y)) * (x'vector_u_hat) - (mean(x)'mean_vector_u_hat)
 {res}
 {com}: cov_xu_hat
 {res}       {txt}           1
     {c TLC}{hline 16}{c TRC}
-  1 {c |}  {res}-5.92225e-10{txt}  {c |}
-  2 {c |}  {res}-5.90944e-10{txt}  {c |}
-  3 {c |}  {res}-3.82536e-10{txt}  {c |}
-  4 {c |}  {res}-3.88471e-11{txt}  {c |}
+  1 {c |}  {res}-5.86484e-10{txt}  {c |}
+  2 {c |}  {res}-5.85111e-10{txt}  {c |}
+  3 {c |}  {res}-3.78675e-10{txt}  {c |}
+  4 {c |}  {res}-3.84587e-11{txt}  {c |}
     {c BLC}{hline 16}{c BRC}
 
 {com}: 
+: 
 : // Comment: The mean of the residuals and the covariance between the residuals and the 
 : // regressors is virtually zero.
 : 
@@ -774,7 +775,7 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}14 Oct 2021, 19:31:30
+ {txt}closed on:  {res}14 Oct 2021, 20:31:20
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

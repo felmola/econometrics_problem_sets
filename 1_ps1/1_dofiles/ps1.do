@@ -117,8 +117,9 @@ adjusted_r_squared
 mean_vector_u_hat = mean(vector_u_hat)
 mean_vector_u_hat
 
-cov_xu_hat = x'vector_u_hat
+cov_xu_hat = (1 / cols(y)) * (x'vector_u_hat) - (mean(x)'mean_vector_u_hat)
 cov_xu_hat
+
 
 // Comment: The mean of the residuals and the covariance between the residuals and the 
 // regressors is virtually zero.
