@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}14 Oct 2021, 01:46:52
+ {txt}opened on:  {res}14 Oct 2021, 19:31:16
 {txt}
 {com}. 
 . *###############################################################################
@@ -160,13 +160,6 @@ r1 {res}  1
 
 {com}: 
 : //------------------------------------------------------------------------------
-: // 1.1.b. Interpretation of B1.
-: //------------------------------------------------------------------------------
-: 
-: // b1 is the marginal effect of the regresor x1 on the expected valuer of y. 
-: // Since b1=0, the marginal effecct of x1 on y is zero.
-: 
-: //------------------------------------------------------------------------------
 : // 1.1.c. OLS Estimator.
 : //------------------------------------------------------------------------------
 : 
@@ -265,16 +258,15 @@ r1 {res}  1
 {res}  -3.88471e-13
 
 {com}: 
-: cov_xu_hat = ((1 / rows(y)) * x'vector_u_hat) - (mean(x)'mean_vector_u_hat)
+: cov_xu_hat = x'vector_u_hat
 {res}
-{com}: 
-: cov_xu_hat
+{com}: cov_xu_hat
 {res}       {txt}           1
     {c TLC}{hline 16}{c TRC}
-  1 {c |}  {res}-1.81719e-13{txt}  {c |}
-  2 {c |}  {res}-7.59680e-14{txt}  {c |}
-  3 {c |}  {res} 3.56892e-14{txt}  {c |}
-  4 {c |}  {res}-1.29063e-17{txt}  {c |}
+  1 {c |}  {res}-5.92225e-10{txt}  {c |}
+  2 {c |}  {res}-5.90944e-10{txt}  {c |}
+  3 {c |}  {res}-3.82536e-10{txt}  {c |}
+  4 {c |}  {res}-3.88471e-11{txt}  {c |}
     {c BLC}{hline 16}{c BRC}
 
 {com}: 
@@ -592,84 +584,6 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
 . * obtained in MATA.
 . *===============================================================================
 . 
-. 
-. // The results are the same.
-. 
-. *===============================================================================
-. * 2.3.a. 
-. *===============================================================================
-. cls
-{txt}
-{com}. //----- First, regress x1 onto the other regressors (without x2), and save the
-. // residuals.
-. reg morekids agem1 agefstm blackm hispm othracem  
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
-{txt}{hline 13}{c +}{hline 34}   F(5, 322536)    = {res}  5620.07
-{txt}       Model {c |} {res}  6215.4505         5   1243.0901   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} 71340.9708   322,536  .221187622   {txt}R-squared       ={res}    0.0801
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0801
-{txt}       Total {c |} {res} 77556.4213   322,541  .240454458   {txt}Root MSE        =   {res} .47031
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}    morekids{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}agem1 {c |}{col 14}{res}{space 2} .0300732{col 26}{space 2} .0002591{col 37}{space 1}  116.08{col 46}{space 3}0.000{col 54}{space 4} .0295654{col 67}{space 3} .0305809
-{txt}{space 5}agefstm {c |}{col 14}{res}{space 2}-.0451706{col 26}{space 2} .0003125{col 37}{space 1} -144.53{col 46}{space 3}0.000{col 54}{space 4}-.0457832{col 67}{space 3} -.044558
-{txt}{space 6}blackm {c |}{col 14}{res}{space 2} .0718813{col 26}{space 2} .0026178{col 37}{space 1}   27.46{col 46}{space 3}0.000{col 54}{space 4} .0667505{col 67}{space 3} .0770122
-{txt}{space 7}hispm {c |}{col 14}{res}{space 2} .1571145{col 26}{space 2} .0048608{col 37}{space 1}   32.32{col 46}{space 3}0.000{col 54}{space 4} .1475874{col 67}{space 3} .1666415
-{txt}{space 4}othracem {c |}{col 14}{res}{space 2} .0732152{col 26}{space 2} .0049651{col 37}{space 1}   14.75{col 46}{space 3}0.000{col 54}{space 4} .0634837{col 67}{space 3} .0829467
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .3906699{col 26}{space 2} .0079511{col 37}{space 1}   49.13{col 46}{space 3}0.000{col 54}{space 4} .3750859{col 67}{space 3} .4062539
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. predict residuals_1, residuals
-{txt}
-{com}. 
-. //----- Second, regress x2 onto the other regressors (without x1), and save the
-. // residuals.
-. reg educm agem1 agefstm blackm hispm othracem  
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
-{txt}{hline 13}{c +}{hline 34}   F(5, 322536)    = {res} 17277.86
-{txt}       Model {c |} {res} 393417.841         5  78683.5682   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} 1468832.29   322,536  4.55401037   {txt}R-squared       ={res}    0.2113
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2112
-{txt}       Total {c |} {res} 1862250.13   322,541  5.77368498   {txt}Root MSE        =   {res}  2.134
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}       educm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}agem1 {c |}{col 14}{res}{space 2} .0219985{col 26}{space 2} .0011755{col 37}{space 1}   18.71{col 46}{space 3}0.000{col 54}{space 4} .0196944{col 67}{space 3} .0243025
-{txt}{space 5}agefstm {c |}{col 14}{res}{space 2} .3328485{col 26}{space 2} .0014182{col 37}{space 1}  234.70{col 46}{space 3}0.000{col 54}{space 4}  .330069{col 67}{space 3} .3356281
-{txt}{space 6}blackm {c |}{col 14}{res}{space 2} .2129144{col 26}{space 2} .0118783{col 37}{space 1}   17.92{col 46}{space 3}0.000{col 54}{space 4} .1896332{col 67}{space 3} .2361957
-{txt}{space 7}hispm {c |}{col 14}{res}{space 2}-2.395421{col 26}{space 2} .0220559{col 37}{space 1} -108.61{col 46}{space 3}0.000{col 54}{space 4} -2.43865{col 67}{space 3}-2.352192
-{txt}{space 4}othracem {c |}{col 14}{res}{space 2}-.5349202{col 26}{space 2} .0225293{col 37}{space 1}  -23.74{col 46}{space 3}0.000{col 54}{space 4}-.5790769{col 67}{space 3}-.4907634
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.822442{col 26}{space 2} .0360783{col 37}{space 1}  133.67{col 46}{space 3}0.000{col 54}{space 4}  4.75173{col 67}{space 3} 4.893155
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. predict residuals_2, residuals
-{txt}
-{com}. 
-. //----- Third, regress y onto both residuals and compare the results with the
-. // full model.
-. reg hourswm residuals_1 residuals_2
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
-{txt}{hline 13}{c +}{hline 34}   F(2, 322539)    = {res}  5848.04
-{txt}       Model {c |} {res} 4037682.84         2  2018841.42   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res}  111345859   322,539   345.21673   {txt}R-squared       ={res}    0.0350
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0350
-{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res}  18.58
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 1}residuals_1 {c |}{col 14}{res}{space 2}-6.374662{col 26}{space 2} .0698024{col 37}{space 1}  -91.32{col 46}{space 3}0.000{col 54}{space 4}-6.511473{col 67}{space 3}-6.237851
-{txt}{space 1}residuals_2 {c |}{col 14}{res}{space 2} .7717739{col 26}{space 2} .0153835{col 37}{space 1}   50.17{col 46}{space 3}0.000{col 54}{space 4} .7416228{col 67}{space 3}  .801925
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 18.80672{col 26}{space 2} .0327154{col 37}{space 1}  574.86{col 46}{space 3}0.000{col 54}{space 4}  18.7426{col 67}{space 3} 18.87084
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
 . reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
 
 {txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
@@ -693,6 +607,165 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
+. // The results are the same.
+. 
+. *===============================================================================
+. * 2.3.a. 
+. *===============================================================================
+. 
+. cls
+{txt}
+{com}. //----- Remove the effect of educm from hourswm.
+. reg hourswm educm 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}   578.93
+{txt}       Model {c |} {res}  206732.46         1   206732.46   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  115176809   322,540  357.093102   {txt}R-squared       ={res}    0.0018
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0018
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res} 18.897
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}educm {c |}{col 14}{res}{space 2} .3331849{col 26}{space 2} .0138475{col 37}{space 1}   24.06{col 46}{space 3}0.000{col 54}{space 4} .3060442{col 67}{space 3} .3603256
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 14.76651{col 26}{space 2} .1711802{col 37}{space 1}   86.26{col 46}{space 3}0.000{col 54}{space 4}   14.431{col 67}{space 3} 15.10202
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict e2_tilda, residuals
+{txt}
+{com}. 
+. //----- Remove the effect of educm from morekids
+. reg morekids educm
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}  7822.27
+{txt}       Model {c |} {res} 1836.36986         1  1836.36986   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 75720.0515   322,540  .234761739   {txt}R-squared       ={res}    0.0237
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0237
+{txt}       Total {c |} {res} 77556.4213   322,541  .240454458   {txt}Root MSE        =   {res} .48452
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    morekids{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}educm {c |}{col 14}{res}{space 2}-.0314023{col 26}{space 2} .0003551{col 37}{space 1}  -88.44{col 46}{space 3}0.000{col 54}{space 4}-.0320982{col 67}{space 3}-.0307064
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7830797{col 26}{space 2} .0043891{col 37}{space 1}  178.41{col 46}{space 3}0.000{col 54}{space 4} .7744772{col 67}{space 3} .7916822
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict x1_tilda, residuals
+{txt}
+{com}. 
+. //----- Regress filtered-out y onto filetred out x, filter being educm.
+. reg e2_tilda x1_tilda
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}  3425.60
+{txt}       Model {c |} {res} 1210401.47         1  1210401.47   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  113966408   322,540  353.340385   {txt}R-squared       ={res}    0.0105
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0105
+{txt}       Total {c |} {res}  115176809   322,541  357.091995   {txt}Root MSE        =   {res} 18.797
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    e2_tilda{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}x1_tilda {c |}{col 14}{res}{space 2}-3.998152{col 26}{space 2} .0683111{col 37}{space 1}  -58.53{col 46}{space 3}0.000{col 54}{space 4}-4.132039{col 67}{space 3}-3.864264
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.96e-07{col 26}{space 2} .0330981{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0648711{col 67}{space 3} .0648717
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. reg hourswm morekids educm
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(2, 322539)    = {res}  2005.33
+{txt}       Model {c |} {res} 1417133.91         2  708566.954   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  113966408   322,539  353.341481   {txt}R-squared       ={res}    0.0123
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0123
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res} 18.797
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}morekids {c |}{col 14}{res}{space 2}-3.998152{col 26}{space 2} .0683112{col 37}{space 1}  -58.53{col 46}{space 3}0.000{col 54}{space 4} -4.13204{col 67}{space 3}-3.864264
+{txt}{space 7}educm {c |}{col 14}{res}{space 2} .2076339{col 26}{space 2} .0139406{col 37}{space 1}   14.89{col 46}{space 3}0.000{col 54}{space 4} .1803107{col 67}{space 3} .2349571
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 17.89738{col 26}{space 2} .1784834{col 37}{space 1}  100.27{col 46}{space 3}0.000{col 54}{space 4} 17.54756{col 67}{space 3}  18.2472
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. //----- Remove the effect of morekids from hourswm.
+. 
+. reg hourswm morekids
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}  3786.24
+{txt}       Model {c |} {res} 1338749.89         1  1338749.89   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  114044792   322,540  353.583406   {txt}R-squared       ={res}    0.0116
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0116
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res} 18.804
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}morekids {c |}{col 14}{res}{space 2}-4.154711{col 26}{space 2} .0675207{col 37}{space 1}  -61.53{col 46}{space 3}0.000{col 54}{space 4} -4.28705{col 67}{space 3}-4.022373
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 20.47814{col 26}{space 2} .0428262{col 37}{space 1}  478.17{col 46}{space 3}0.000{col 54}{space 4}  20.3942{col 67}{space 3} 20.56208
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict e1_tilda, residuals
+{txt}
+{com}. 
+. //----- Remove the effect of morekids from educm.
+. reg educm morekids
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}  7822.27
+{txt}       Model {c |} {res} 44094.0925         1  44094.0925   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 1818156.04   322,540  5.63699397   {txt}R-squared       ={res}    0.0237
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0237
+{txt}       Total {c |} {res} 1862250.13   322,541  5.77368498   {txt}Root MSE        =   {res} 2.3742
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       educm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}morekids {c |}{col 14}{res}{space 2}-.7540173{col 26}{space 2} .0085254{col 37}{space 1}  -88.44{col 46}{space 3}0.000{col 54}{space 4}-.7707269{col 67}{space 3}-.7373078
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 12.42936{col 26}{space 2} .0054074{col 37}{space 1} 2298.59{col 46}{space 3}0.000{col 54}{space 4} 12.41877{col 67}{space 3} 12.43996
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict x2_tilda, residuals
+{txt}
+{com}. 
+. //----- Remove the effect of educm from morekids.
+. reg e1_tilda x2_tilda
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(1, 322540)    = {res}   221.84
+{txt}       Model {c |} {res}  78384.007         1   78384.007   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  113966407   322,540  353.340383   {txt}R-squared       ={res}    0.0007
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0007
+{txt}       Total {c |} {res}  114044791   322,541  353.582308   {txt}Root MSE        =   {res} 18.797
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    e1_tilda{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}x2_tilda {c |}{col 14}{res}{space 2} .2076338{col 26}{space 2} .0139406{col 37}{space 1}   14.89{col 46}{space 3}0.000{col 54}{space 4} .1803107{col 67}{space 3}  .234957
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 5.33e-07{col 26}{space 2} .0330981{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0648709{col 67}{space 3} .0648719
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. reg hourswm morekids educm
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}   322,542
+{txt}{hline 13}{c +}{hline 34}   F(2, 322539)    = {res}  2005.33
+{txt}       Model {c |} {res} 1417133.91         2  708566.954   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  113966408   322,539  353.341481   {txt}R-squared       ={res}    0.0123
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0123
+{txt}       Total {c |} {res}  115383542   322,541  357.732945   {txt}Root MSE        =   {res} 18.797
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     hourswm{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}morekids {c |}{col 14}{res}{space 2}-3.998152{col 26}{space 2} .0683112{col 37}{space 1}  -58.53{col 46}{space 3}0.000{col 54}{space 4} -4.13204{col 67}{space 3}-3.864264
+{txt}{space 7}educm {c |}{col 14}{res}{space 2} .2076339{col 26}{space 2} .0139406{col 37}{space 1}   14.89{col 46}{space 3}0.000{col 54}{space 4} .1803107{col 67}{space 3} .2349571
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 17.89738{col 26}{space 2} .1784834{col 37}{space 1}  100.27{col 46}{space 3}0.000{col 54}{space 4} 17.54756{col 67}{space 3}  18.2472
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
 . *###############################################################################
 . * n. Close log.
 . *###############################################################################
@@ -701,7 +774,7 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}14 Oct 2021, 01:47:06
+ {txt}closed on:  {res}14 Oct 2021, 19:31:30
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

@@ -3,7 +3,7 @@
 *###############################################################################
 clear all
 set more off
-dir "A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1"
+cd "A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1"
 
 log using 2_log\log, replace
 
@@ -55,13 +55,6 @@ mean_x
 
 beta_0 = 10 - (mean_x'*beta)
 beta_0
-
-//------------------------------------------------------------------------------
-// 1.1.b. Interpretation of B1.
-//------------------------------------------------------------------------------
-
-// b1 is the marginal effect of the regresor x1 on the expected valuer of y. 
-// Since b1=0, the marginal effecct of x1 on y is zero.
 
 //------------------------------------------------------------------------------
 // 1.1.c. OLS Estimator.
@@ -262,28 +255,39 @@ end
 * obtained in MATA.
 *===============================================================================
 
+reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
 
 // The results are the same.
 
 *===============================================================================
 * 2.3.a. 
 *===============================================================================
+
 cls
-//----- First, regress x1 onto the other regressors (without x2), and save the
-// residuals.
-reg morekids agem1 agefstm blackm hispm othracem  
-predict residuals_1, residuals
+//----- Remove the effect of educm from hourswm.
+reg hourswm educm 
+predict e2_tilda, residuals
 
-//----- Second, regress x2 onto the other regressors (without x1), and save the
-// residuals.
-reg educm agem1 agefstm blackm hispm othracem  
-predict residuals_2, residuals
+//----- Remove the effect of educm from morekids
+reg morekids educm
+predict x1_tilda, residuals
 
-//----- Third, regress y onto both residuals and compare the results with the
-// full model.
-reg hourswm residuals_1 residuals_2
+//----- Regress filtered-out y onto filetred out x, filter being educm.
+reg e2_tilda x1_tilda
+reg hourswm morekids educm
 
-reg hourswm morekids educm agem1 agefstm blackm hispm othracem 
+//----- Remove the effect of morekids from hourswm.
+
+reg hourswm morekids
+predict e1_tilda, residuals
+
+//----- Remove the effect of morekids from educm.
+reg educm morekids
+predict x2_tilda, residuals
+
+//----- Remove the effect of educm from morekids.
+reg e1_tilda x2_tilda
+reg hourswm morekids educm
 
 *###############################################################################
 * n. Close log.
