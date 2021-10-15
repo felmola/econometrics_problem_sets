@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}14 Oct 2021, 20:31:07
+ {txt}opened on:  {res}15 Oct 2021, 16:16:18
 {txt}
 {com}. 
 . *###############################################################################
@@ -511,6 +511,20 @@ Simulations ({res}1,000{txt})
 {com}. graph save 3_graphs\betas.gph, replace
 {res}{txt}file {bf:3_graphs\betas.gph} saved
 
+{com}. graph export 3_graphs\betas.png, as(png) replace
+{txt}{p 0 4 2}
+(file {bf}
+3_graphs\betas.png{rm}
+not found)
+{p_end}
+{p 0 4 2}
+file {bf}
+3_graphs\betas.png{rm}
+saved as
+PNG
+format
+{p_end}
+
 {com}. 
 . //Comment: They look pretty normal, no pun intended.
 . 
@@ -775,7 +789,7 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}14 Oct 2021, 20:31:20
+ {txt}closed on:  {res}15 Oct 2021, 16:16:50
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
