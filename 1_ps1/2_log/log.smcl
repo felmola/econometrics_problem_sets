@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Oct 2021, 16:16:18
+ {txt}opened on:  {res}15 Oct 2021, 17:57:55
 {txt}
 {com}. 
 . *###############################################################################
@@ -497,13 +497,31 @@ Simulations ({res}1,000{txt})
 . *-------------------------------------------------------------------------------
 . 
 . foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{c -(}
-{txt}  2{com}.         histogram `var', normal name(`var', replace)
-{txt}  3{com}.         local graphnames `graphnames' `var'
-{txt}  4{com}. {c )-}
+{txt}  2{com}.         summarize `var'
+{txt}  3{com}.         local m = r(mean)
+{txt}  4{com}.         histogram `var', normal xline(`m') name(`var', replace)
+{txt}  5{com}.         local graphnames `graphnames' `var'
+{txt}  6{com}. {c )-}
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_0_hat {c |}{res}      1,000    .8302528    1.838884  -4.651379   5.667601
 {txt}(bin={res}29{txt}, start={res}-4.6513786{txt}, width={res}.35582689{txt})
-{res}{txt}(bin={res}29{txt}, start={res}.19549048{txt}, width={res}.02521118{txt})
-{res}{txt}(bin={res}29{txt}, start={res}-.24197945{txt}, width={res}.01698496{txt})
-{res}{txt}(bin={res}29{txt}, start={res}-.26725462{txt}, width={res}.02076089{txt})
+{res}
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_1_hat {c |}{res}      1,000    .5962717    .0876936   .1954905   .9266147
+{txt}(bin={res}29{txt}, start={res}.19549048{txt}, width={res}.02521118{txt})
+{res}
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_2_hat {c |}{res}      1,000    .0033474    .0819166  -.2419794   .2505844
+{txt}(bin={res}29{txt}, start={res}-.24197945{txt}, width={res}.01698496{txt})
+{res}
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}beta_3_hat {c |}{res}      1,000    .0176864    .0868876  -.2672546   .3348112
+{txt}(bin={res}29{txt}, start={res}-.26725462{txt}, width={res}.02076089{txt})
 {res}{txt}
 {com}. 
 . graph combine `graphnames'
@@ -513,11 +531,6 @@ Simulations ({res}1,000{txt})
 
 {com}. graph export 3_graphs\betas.png, as(png) replace
 {txt}{p 0 4 2}
-(file {bf}
-3_graphs\betas.png{rm}
-not found)
-{p_end}
-{p 0 4 2}
 file {bf}
 3_graphs\betas.png{rm}
 saved as
@@ -789,7 +802,7 @@ twin_birth_2 {c |}{res}    322,542    .0094747    .0968762          0          1
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\1_ps1\2_log\log.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}15 Oct 2021, 16:16:50
+ {txt}closed on:  {res}15 Oct 2021, 17:58:29
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

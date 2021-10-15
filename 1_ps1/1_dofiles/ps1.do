@@ -217,12 +217,15 @@ summarize `var'
 *-------------------------------------------------------------------------------
 
 foreach var  of varlist beta_0_hat beta_1_hat beta_2_hat beta_3_hat{
-	histogram `var', normal name(`var', replace)
+	summarize `var'
+	local m = r(mean)
+	histogram `var', normal xline(`m') name(`var', replace)
 	local graphnames `graphnames' `var'
 }
 
 graph combine `graphnames'
 graph save 3_graphs\betas.gph, replace
+graph export 3_graphs\betas.png, as(png) replace
 
 //Comment: They look pretty normal, no pun intended.
 
