@@ -1,7 +1,3 @@
-/*
-Todo: Enable log again
-*/
-
 //*#############################################################################
 //* 0. Set working directory and log.
 //*#############################################################################
@@ -9,7 +5,7 @@ clear all
 set more off
 cd "A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"
 
-//log using 3_log\log, replace
+log using 3_log\log, replace
 
 //*#############################################################################
 //* A.
@@ -108,48 +104,69 @@ scalar mean_etr = r(mean)
 di mean_etr
 lincom _b[expos_to_robots] + (2 * _b[expos_2] * mean_etr)
 
+//*=============================================================================
+//* B.6. Heteroskedasticity tests.
+//*----- Runnign full regression without rob.
 
-
-
+reg d_emppriv_1990_2011 expos_to_robots expos_2 ipums_logpop_1990 ipums_female_1990 ipums_above65_1990 ipums_somecollege_1990 ipums_college_1990 ipums_masters_1990 ipums_black_1990 ipums_hispanic_1990 ipums_asian_1990
 rvfplot, yline(0)
+estat imtest, white
 
+//*#############################################################################
+//* C.
+//*#############################################################################
 
-di _b[expos_to_robots] + 2 * _b[expos_2]
-lincom _b[expos_to_robots] + 2 * _b[expos_2] * expos_to_robots
-li
-test expos_2
+clear all
+use 1_data\dataset_2.dta
+summarize
 
-rvfplot, yline(0)
+//*=============================================================================
+//* C.1. Creating a dummy variable for whites.
+//*=============================================================================
+
+codebook race
+gen white = 0 if race != 5
+replace white = 1 if race == 5
+tab race white
+
+//*=============================================================================
+//* C.2. Regression.
+//*=============================================================================
+
+reg d_yrwage_ln_1990_2011 c.expos_to_robots##i.female white##i.education, rob
+outreg2 using 5_tables\reg4, tex replace
+
+//*=============================================================================
+//* C.3. Chow test for testing differences between whites and non-whites.
+//*=============================================================================
+
+//* Not included.
+
+//*=============================================================================
+//* C.4	Test of the difference in marginal effect of robots on men and women.
+//*=============================================================================
+
+test 1.female#c.expos_to_robots
+
+//*=============================================================================
+//* C.5. Regression with dummy variables for education levels.
+//*=============================================================================
+
+tabulate education, generate(edu)
+reg d_yrwage_ln_1990_2011 expos_to_robots female edu2 edu3 edu4 edu5 
+
+//*=============================================================================
+//* C.6. Regression with interaction between robots and dummies for education.
+//*=============================================================================
+
+reg d_yrwage_ln_1990_2011 c.expos_to_robots##i.education female race, rob
+outreg2 using 5_tables\reg5, tex replace
 
 //*#############################################################################
 //* n. Close log.
 //*#############################################################################
 
-//log close
-//translate 3_log\log.smcl 3_log\log.pdf, replace
+log close
+translate 3_log\log.smcl 3_log\log.pdf, replace
 
 //*#############################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//*#############################################################################
-//* 0. Set working directory and log.
-//*#############################################################################
-//*=============================================================================
-//* 1.1.
-//*=============================================================================
-//*-----------------------------------------------------------------------------
-//* 1.1.1.
-//*-----------------------------------------------------------------------------

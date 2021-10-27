@@ -1,0 +1,586 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2\3_log\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 Oct 2021, 19:59:47
+{txt}
+{com}. 
+. //*#############################################################################
+. //* A.
+. //*#############################################################################
+. 
+. use 1_data\dataset_1.dta
+{txt}
+{com}. 
+. //*=============================================================================
+. //* A.1.
+. //*=============================================================================
+. //*----- Calculate the mean value for each TV over all sample.
+. 
+. 
+. //*----- Calculate mean values of each target variable (TV).
+. 
+. bysort state_code: egen mean_etr = mean(expos_to_robots)
+{txt}
+{com}. bysort state_code: egen mean_emp = mean(d_emppriv_1990_2011)
+{txt}
+{com}. 
+. //*----- Remove duplicated data to display min and max values.
+. 
+. quietly by state_code:  gen dup = cond(_N==1,0,_n)
+{txt}
+{com}. drop if dup > 1
+{txt}(674 observations deleted)
+
+{com}. 
+. //*----- Identify the states that have the min and max values for each TV.
+. 
+. sort mean_etr
+{txt}
+{com}. gen min_etr_state = 1 if _n == 1
+{txt}(47 missing values generated)
+
+{com}. gen max_etr_state = 1 if _n == _N
+{txt}(47 missing values generated)
+
+{com}. table state_code (min_etr_state), statistic (mean mean_etr) nototals
+{res}
+{smcl}
+{reset}{...}
+{hline 7}{c -}{c TT}{c -}{c -}{hline 13}
+{space 7} {c |}  min_etr_state
+{space 7} {c |}  {space 12}1
+{hline 7}{c -}{c +}{c -}{c -}{hline 13}
+state_l {c |}  {space 13}
+  NV{space 3} {c |}  {space 5}{result:.5719783}
+{hline 7}{c -}{c BT}{c -}{c -}{hline 13}
+
+{com}. table state_code (max_etr_state), statistic (mean mean_etr) nototals
+{res}
+{smcl}
+{reset}{...}
+{hline 7}{c -}{c TT}{c -}{c -}{hline 13}
+{space 7} {c |}  max_etr_state
+{space 7} {c |}  {space 12}1
+{hline 7}{c -}{c +}{c -}{c -}{hline 13}
+state_l {c |}  {space 13}
+  MI{space 3} {c |}  {space 5}{result:5.246422}
+{hline 7}{c -}{c BT}{c -}{c -}{hline 13}
+
+{com}. 
+. sort mean_emp
+{txt}
+{com}. gen min_emp_state = 1 if _n == 1
+{txt}(47 missing values generated)
+
+{com}. gen max_emp_state = 1 if _n == _N
+{txt}(47 missing values generated)
+
+{com}. table state_code (min_emp_state), statistic (mean mean_emp) nototals
+{res}
+{smcl}
+{reset}{...}
+{hline 7}{c -}{c TT}{c -}{c -}{hline 13}
+{space 7} {c |}  min_emp_state
+{space 7} {c |}  {space 12}1
+{hline 7}{c -}{c +}{c -}{c -}{hline 13}
+state_l {c |}  {space 13}
+  NC{space 3} {c |}  {space 4}{result:-4.594934}
+{hline 7}{c -}{c BT}{c -}{c -}{hline 13}
+
+{com}. table state_code (max_emp_state), statistic (mean mean_emp) nototals
+{res}
+{smcl}
+{reset}{...}
+{hline 7}{c -}{c TT}{c -}{c -}{hline 13}
+{space 7} {c |}  max_emp_state
+{space 7} {c |}  {space 12}1
+{hline 7}{c -}{c +}{c -}{c -}{hline 13}
+state_l {c |}  {space 13}
+  ND{space 3} {c |}  {space 5}{result:7.900403}
+{hline 7}{c -}{c BT}{c -}{c -}{hline 13}
+
+{com}. 
+. //*----- Calculate the mean value for each TV over state means.
+. 
+. summarize mean_etr
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}mean_etr {c |}{res}         48    1.852853    .9572189   .5719783   5.246422
+{txt}
+{com}. summarize mean_emp
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}mean_emp {c |}{res}         48    .3809222    2.482054  -4.594934   7.900403
+{txt}
+{com}. 
+. //*----- Two-way catterplot with regression line.
+. 
+. clear all
+{res}{txt}
+{com}. use 1_data\dataset_1.dta
+{txt}
+{com}. 
+. graph twoway (lfitci d_emppriv_1990_2011 expos_to_robots, xtitle("Exposure to robots")) (scatter d_emppriv_1990_2011 expos_to_robots, msize(tiny) legend(size(small) label(3 "Change in the share of private employment over total population. 1990-2011.")))
+{res}{txt}
+{com}.  
+. graph save "scatter_line.gph", replace
+{res}{txt}file {bf:scatter_line.gph} saved
+
+{com}. graph save 4_graphs\scatter_line.gph, replace
+{res}{txt}file {bf:4_graphs\scatter_line.gph} saved
+
+{com}. graph export 4_graphs\scatter_line.png, as(png) replace
+{txt}{p 0 4 2}
+file {bf}
+4_graphs\scatter_line.png{rm}
+saved as
+PNG
+format
+{p_end}
+
+{com}. graph close
+{txt}
+{com}. 
+. //*#############################################################################
+. //* B.
+. //*#############################################################################
+. 
+. clear all
+{res}{txt}
+{com}. use 1_data\dataset_1.dta
+{txt}
+{com}. 
+. //*=============================================================================
+. //* B.2. Simple linear regression.
+. //*=============================================================================
+. 
+. reg d_emppriv_1990_2011 expos_to_robots, rob
+
+{txt}Linear regression                               Number of obs     = {res}       722
+                                                {txt}F(1, 720)         =  {res}    99.20
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.1421
+                                                {txt}Root MSE          =    {res}  2.955
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 17}{c |}{col 29}    Robust
+{col 1}d_emppriv_~2011{col 17}{c |} Coefficient{col 29}  std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+expos_to_robots {c |}{col 17}{res}{space 2} -1.09071{col 29}{space 2} .1095083{col 40}{space 1}   -9.96{col 49}{space 3}0.000{col 57}{space 4}-1.305704{col 70}{space 3}-.8757165
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2} 2.774654{col 29}{space 2} .2344016{col 40}{space 1}   11.84{col 49}{space 3}0.000{col 57}{space 4} 2.314461{col 70}{space 3} 3.234846
+{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg1, tex replace
+{txt}{stata `"shellout using `"5_tables\reg1.tex"'"':5_tables\reg1.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg1.txt""':seeout}
+
+{com}. 
+. //*=============================================================================
+. //* B.3. Regression with additional controls.
+. //*=============================================================================
+. 
+. reg d_emppriv_1990_2011 expos_to_robots ipums_logpop_1990 ipums_female_1990 ipums_above65_1990 ipums_highschool_1990 ipums_somecollege_1990 ipums_college_1990 ipums_masters_1990 ipums_white_1990 ipums_black_1990 ipums_hispanic_1990 ipums_asian_1990, rob
+{txt}{p 0 6 2}note: {bf:ipums_college_1990} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:ipums_hispanic_1990} omitted because of collinearity.{p_end}
+
+Linear regression                               Number of obs     = {res}       722
+                                                {txt}F(10, 711)        =  {res}    46.76
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.3847
+                                                {txt}Root MSE          =    {res} 2.5183
+
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}    Robust
+{col 1}   d_emppriv_1990_2011{col 24}{c |} Coefficient{col 36}  std. err.{col 48}      t{col 56}   P>|t|{col 64}     [95% con{col 77}f. interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}expos_to_robots {c |}{col 24}{res}{space 2} -.555736{col 36}{space 2} .0887673{col 47}{space 1}   -6.26{col 56}{space 3}0.000{col 64}{space 4}-.7300135{col 77}{space 3}-.3814585
+{txt}{space 5}ipums_logpop_1990 {c |}{col 24}{res}{space 2}-.4474018{col 36}{space 2} .0894417{col 47}{space 1}   -5.00{col 56}{space 3}0.000{col 64}{space 4}-.6230033{col 77}{space 3}-.2718003
+{txt}{space 5}ipums_female_1990 {c |}{col 24}{res}{space 2} .6339813{col 36}{space 2} 15.73012{col 47}{space 1}    0.04{col 56}{space 3}0.968{col 64}{space 4}-30.24906{col 77}{space 3} 31.51702
+{txt}{space 4}ipums_above65_1990 {c |}{col 24}{res}{space 2} 11.57593{col 36}{space 2} 5.439096{col 47}{space 1}    2.13{col 56}{space 3}0.034{col 64}{space 4} .8973153{col 77}{space 3} 22.25454
+{txt}{space 1}ipums_highschool_1990 {c |}{col 24}{res}{space 2}-23.29328{col 36}{space 2} 6.426127{col 47}{space 1}   -3.62{col 56}{space 3}0.000{col 64}{space 4}-35.90973{col 77}{space 3}-10.67683
+{txt}ipums_somecollege_1990 {c |}{col 24}{res}{space 2}-12.70352{col 36}{space 2}  8.72179{col 47}{space 1}   -1.46{col 56}{space 3}0.146{col 64}{space 4}-29.82706{col 77}{space 3} 4.420027
+{txt}{space 4}ipums_college_1990 {c |}{col 24}{res}{space 2}        0{col 36}{txt}  (omitted)
+{space 4}ipums_masters_1990 {c |}{col 24}{res}{space 2}-76.55848{col 36}{space 2} 15.78116{col 47}{space 1}   -4.85{col 56}{space 3}0.000{col 64}{space 4}-107.5417{col 77}{space 3}-45.57523
+{txt}{space 6}ipums_white_1990 {c |}{col 24}{res}{space 2}-1.879022{col 36}{space 2} .6873117{col 47}{space 1}   -2.73{col 56}{space 3}0.006{col 64}{space 4}-3.228426{col 77}{space 3}-.5296192
+{txt}{space 6}ipums_black_1990 {c |}{col 24}{res}{space 2}-7.003238{col 36}{space 2} .9646186{col 47}{space 1}   -7.26{col 56}{space 3}0.000{col 64}{space 4}-8.897079{col 77}{space 3}-5.109396
+{txt}{space 3}ipums_hispanic_1990 {c |}{col 24}{res}{space 2}        0{col 36}{txt}  (omitted)
+{space 6}ipums_asian_1990 {c |}{col 24}{res}{space 2}-28.80399{col 36}{space 2} 8.598956{col 47}{space 1}   -3.35{col 56}{space 3}0.001{col 64}{space 4}-45.68638{col 77}{space 3}-11.92161
+{txt}{space 17}_cons {c |}{col 24}{res}{space 2} 27.46541{col 36}{space 2} 11.39099{col 47}{space 1}    2.41{col 56}{space 3}0.016{col 64}{space 4} 5.101417{col 77}{space 3}  49.8294
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg2, tex replace
+{txt}{stata `"shellout using `"5_tables\reg2.tex"'"':5_tables\reg2.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg2.txt""':seeout}
+
+{com}. 
+. //*----- Dropping some variables because of multicollinearity.
+. 
+. reg d_emppriv_1990_2011 expos_to_robots ipums_logpop_1990 ipums_female_1990 ipums_above65_1990 ipums_somecollege_1990 ipums_college_1990 ipums_masters_1990 ipums_black_1990 ipums_hispanic_1990 ipums_asian_1990, rob
+
+{txt}Linear regression                               Number of obs     = {res}       722
+                                                {txt}F(10, 711)        =  {res}    46.76
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.3847
+                                                {txt}Root MSE          =    {res} 2.5183
+
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}    Robust
+{col 1}   d_emppriv_1990_2011{col 24}{c |} Coefficient{col 36}  std. err.{col 48}      t{col 56}   P>|t|{col 64}     [95% con{col 77}f. interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}expos_to_robots {c |}{col 24}{res}{space 2} -.555736{col 36}{space 2} .0887673{col 47}{space 1}   -6.26{col 56}{space 3}0.000{col 64}{space 4}-.7300135{col 77}{space 3}-.3814585
+{txt}{space 5}ipums_logpop_1990 {c |}{col 24}{res}{space 2}-.4474018{col 36}{space 2} .0894417{col 47}{space 1}   -5.00{col 56}{space 3}0.000{col 64}{space 4}-.6230033{col 77}{space 3}-.2718003
+{txt}{space 5}ipums_female_1990 {c |}{col 24}{res}{space 2} .6339831{col 36}{space 2} 15.73012{col 47}{space 1}    0.04{col 56}{space 3}0.968{col 64}{space 4}-30.24906{col 77}{space 3} 31.51702
+{txt}{space 4}ipums_above65_1990 {c |}{col 24}{res}{space 2} 11.57593{col 36}{space 2} 5.439096{col 47}{space 1}    2.13{col 56}{space 3}0.034{col 64}{space 4} .8973147{col 77}{space 3} 22.25454
+{txt}ipums_somecollege_1990 {c |}{col 24}{res}{space 2} 10.58976{col 36}{space 2}  3.28857{col 47}{space 1}    3.22{col 56}{space 3}0.001{col 64}{space 4} 4.133291{col 77}{space 3} 17.04623
+{txt}{space 4}ipums_college_1990 {c |}{col 24}{res}{space 2} 23.29329{col 36}{space 2} 6.426127{col 47}{space 1}    3.62{col 56}{space 3}0.000{col 64}{space 4} 10.67683{col 77}{space 3} 35.90974
+{txt}{space 4}ipums_masters_1990 {c |}{col 24}{res}{space 2}-53.26521{col 36}{space 2}  11.6925{col 47}{space 1}   -4.56{col 56}{space 3}0.000{col 64}{space 4}-76.22117{col 77}{space 3}-30.30924
+{txt}{space 6}ipums_black_1990 {c |}{col 24}{res}{space 2}-5.124215{col 36}{space 2} 1.046752{col 47}{space 1}   -4.90{col 56}{space 3}0.000{col 64}{space 4}-7.179309{col 77}{space 3}-3.069122
+{txt}{space 3}ipums_hispanic_1990 {c |}{col 24}{res}{space 2} 1.879022{col 36}{space 2} .6873117{col 47}{space 1}    2.73{col 56}{space 3}0.006{col 64}{space 4} .5296187{col 77}{space 3} 3.228425
+{txt}{space 6}ipums_asian_1990 {c |}{col 24}{res}{space 2}-26.92497{col 36}{space 2} 8.413793{col 47}{space 1}   -3.20{col 56}{space 3}0.001{col 64}{space 4}-43.44382{col 77}{space 3}-10.40612
+{txt}{space 17}_cons {c |}{col 24}{res}{space 2} 2.293104{col 36}{space 2} 7.817483{col 47}{space 1}    0.29{col 56}{space 3}0.769{col 64}{space 4}-13.05501{col 77}{space 3} 17.64122
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg2, tex replace
+{txt}{stata `"shellout using `"5_tables\reg2.tex"'"':5_tables\reg2.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg2.txt""':seeout}
+
+{com}. 
+. //*=============================================================================
+. //* B.4. Regression with the square of expos_to_robots.
+. //*=============================================================================
+. 
+. gen expos_2 = expos_to_robots*expos_to_robots
+{txt}
+{com}. reg d_emppriv_1990_2011 expos_to_robots expos_2 ipums_logpop_1990 ipums_female_1990 ipums_above65_1990 ipums_somecollege_1990 ipums_college_1990 ipums_masters_1990 ipums_black_1990 ipums_hispanic_1990 ipums_asian_1990, rob
+
+{txt}Linear regression                               Number of obs     = {res}       722
+                                                {txt}F(11, 710)        =  {res}    47.47
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.3934
+                                                {txt}Root MSE          =    {res} 2.5022
+
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}    Robust
+{col 1}   d_emppriv_1990_2011{col 24}{c |} Coefficient{col 36}  std. err.{col 48}      t{col 56}   P>|t|{col 64}     [95% con{col 77}f. interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}expos_to_robots {c |}{col 24}{res}{space 2} -1.32494{col 36}{space 2} .2462026{col 47}{space 1}   -5.38{col 56}{space 3}0.000{col 64}{space 4}-1.808312{col 77}{space 3}-.8415678
+{txt}{space 15}expos_2 {c |}{col 24}{res}{space 2} .1055034{col 36}{space 2} .0272236{col 47}{space 1}    3.88{col 56}{space 3}0.000{col 64}{space 4} .0520549{col 77}{space 3} .1589518
+{txt}{space 5}ipums_logpop_1990 {c |}{col 24}{res}{space 2} -.404733{col 36}{space 2} .0928466{col 47}{space 1}   -4.36{col 56}{space 3}0.000{col 64}{space 4}-.5870197{col 77}{space 3}-.2224463
+{txt}{space 5}ipums_female_1990 {c |}{col 24}{res}{space 2} 4.906006{col 36}{space 2} 15.72564{col 47}{space 1}    0.31{col 56}{space 3}0.755{col 64}{space 4}-25.96831{col 77}{space 3} 35.78032
+{txt}{space 4}ipums_above65_1990 {c |}{col 24}{res}{space 2} 10.56819{col 36}{space 2} 5.561721{col 47}{space 1}    1.90{col 56}{space 3}0.058{col 64}{space 4}-.3512001{col 77}{space 3} 21.48757
+{txt}ipums_somecollege_1990 {c |}{col 24}{res}{space 2} 8.748911{col 36}{space 2} 3.285391{col 47}{space 1}    2.66{col 56}{space 3}0.008{col 64}{space 4} 2.298667{col 77}{space 3} 15.19916
+{txt}{space 4}ipums_college_1990 {c |}{col 24}{res}{space 2} 20.84298{col 36}{space 2} 6.385557{col 47}{space 1}    3.26{col 56}{space 3}0.001{col 64}{space 4} 8.306145{col 77}{space 3} 33.37981
+{txt}{space 4}ipums_masters_1990 {c |}{col 24}{res}{space 2}-50.07539{col 36}{space 2} 11.56498{col 47}{space 1}   -4.33{col 56}{space 3}0.000{col 64}{space 4}-72.78104{col 77}{space 3}-27.36974
+{txt}{space 6}ipums_black_1990 {c |}{col 24}{res}{space 2}-5.610725{col 36}{space 2} 1.052319{col 47}{space 1}   -5.33{col 56}{space 3}0.000{col 64}{space 4}-7.676753{col 77}{space 3}-3.544697
+{txt}{space 3}ipums_hispanic_1990 {c |}{col 24}{res}{space 2} 1.222744{col 36}{space 2} .7225081{col 47}{space 1}    1.69{col 56}{space 3}0.091{col 64}{space 4}-.1957636{col 77}{space 3} 2.641252
+{txt}{space 6}ipums_asian_1990 {c |}{col 24}{res}{space 2}-26.26183{col 36}{space 2} 8.474227{col 47}{space 1}   -3.10{col 56}{space 3}0.002{col 64}{space 4}-42.89937{col 77}{space 3}-9.624286
+{txt}{space 17}_cons {c |}{col 24}{res}{space 2} 1.340348{col 36}{space 2} 7.813079{col 47}{space 1}    0.17{col 56}{space 3}0.864{col 64}{space 4}-13.99915{col 77}{space 3} 16.67985
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg3, tex replace
+{txt}{stata `"shellout using `"5_tables\reg3.tex"'"':5_tables\reg3.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg3.txt""':seeout}
+
+{com}. 
+. //*=============================================================================
+. //* B.5. Testing the marginal effect of expos_to_robots (and its cuadratic term).
+. //*=============================================================================
+. //*----- Evaluating the marginal effect of exposure to robots at the mean of expos_to_robots.
+. 
+. summarize expos_to_robots
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+expos_to_r~s {c |}{res}        722    1.800013    1.101769   .4188264   10.26309
+{txt}
+{com}. scalar mean_etr = r(mean)
+{txt}
+{com}. di mean_etr
+{res}1.800013
+{txt}
+{com}. lincom _b[expos_to_robots] + (2 * _b[expos_2] * mean_etr)
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}expos_to_robots + 3.600026{res}*{res}expos_2 = 0{p_end}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}d_emppr~2011{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}(1) {c |}{col 14}{res}{space 2}-.9451252{col 26}{space 2} .1541927{col 37}{space 1}   -6.13{col 46}{space 3}0.000{col 54}{space 4}-1.247853{col 67}{space 3}-.6423971
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. //*=============================================================================
+. //* B.6. Heteroskedasticity tests.
+. //*----- Runnign full regression without rob.
+. 
+. reg d_emppriv_1990_2011 expos_to_robots expos_2 ipums_logpop_1990 ipums_female_1990 ipums_above65_1990 ipums_somecollege_1990 ipums_college_1990 ipums_masters_1990 ipums_black_1990 ipums_hispanic_1990 ipums_asian_1990
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       722
+{txt}{hline 13}{c +}{hline 34}   F(11, 710)      = {res}    41.86
+{txt}       Model {c |} {res} 2882.94304        11  262.085731   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 4445.29832       710  6.26098355   {txt}R-squared       ={res}    0.3934
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3840
+{txt}       Total {c |} {res} 7328.24136       721  10.1639963   {txt}Root MSE        =   {res} 2.5022
+
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   d_emppriv_1990_2011{col 24}{c |} Coefficient{col 36}  Std. err.{col 48}      t{col 56}   P>|t|{col 64}     [95% con{col 77}f. interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}expos_to_robots {c |}{col 24}{res}{space 2} -1.32494{col 36}{space 2} .2619301{col 47}{space 1}   -5.06{col 56}{space 3}0.000{col 64}{space 4} -1.83919{col 77}{space 3}-.8106898
+{txt}{space 15}expos_2 {c |}{col 24}{res}{space 2} .1055034{col 36}{space 2} .0330962{col 47}{space 1}    3.19{col 56}{space 3}0.001{col 64}{space 4} .0405253{col 77}{space 3} .1704815
+{txt}{space 5}ipums_logpop_1990 {c |}{col 24}{res}{space 2} -.404733{col 36}{space 2} .0852326{col 47}{space 1}   -4.75{col 56}{space 3}0.000{col 64}{space 4}-.5720711{col 77}{space 3}-.2373948
+{txt}{space 5}ipums_female_1990 {c |}{col 24}{res}{space 2} 4.906006{col 36}{space 2} 15.32995{col 47}{space 1}    0.32{col 56}{space 3}0.749{col 64}{space 4}-25.19145{col 77}{space 3} 35.00346
+{txt}{space 4}ipums_above65_1990 {c |}{col 24}{res}{space 2} 10.56819{col 36}{space 2} 4.401876{col 47}{space 1}    2.40{col 56}{space 3}0.017{col 64}{space 4} 1.925936{col 77}{space 3} 19.21044
+{txt}ipums_somecollege_1990 {c |}{col 24}{res}{space 2} 8.748911{col 36}{space 2} 3.116931{col 47}{space 1}    2.81{col 56}{space 3}0.005{col 64}{space 4} 2.629407{col 77}{space 3} 14.86842
+{txt}{space 4}ipums_college_1990 {c |}{col 24}{res}{space 2} 20.84298{col 36}{space 2} 5.934436{col 47}{space 1}    3.51{col 56}{space 3}0.000{col 64}{space 4} 9.191836{col 77}{space 3} 32.49412
+{txt}{space 4}ipums_masters_1990 {c |}{col 24}{res}{space 2}-50.07539{col 36}{space 2} 12.29295{col 47}{space 1}   -4.07{col 56}{space 3}0.000{col 64}{space 4}-74.21027{col 77}{space 3} -25.9405
+{txt}{space 6}ipums_black_1990 {c |}{col 24}{res}{space 2}-5.610725{col 36}{space 2} 1.126267{col 47}{space 1}   -4.98{col 56}{space 3}0.000{col 64}{space 4}-7.821937{col 77}{space 3}-3.399513
+{txt}{space 3}ipums_hispanic_1990 {c |}{col 24}{res}{space 2} 1.222744{col 36}{space 2} .9225356{col 47}{space 1}    1.33{col 56}{space 3}0.185{col 64}{space 4}-.5884797{col 77}{space 3} 3.033968
+{txt}{space 6}ipums_asian_1990 {c |}{col 24}{res}{space 2}-26.26183{col 36}{space 2} 10.24617{col 47}{space 1}   -2.56{col 56}{space 3}0.011{col 64}{space 4}-46.37824{col 77}{space 3}-6.145417
+{txt}{space 17}_cons {c |}{col 24}{res}{space 2} 1.340348{col 36}{space 2} 7.462319{col 47}{space 1}    0.18{col 56}{space 3}0.858{col 64}{space 4} -13.3105{col 77}{space 3}  15.9912
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. rvfplot, yline(0)
+{res}{txt}
+{com}. estat imtest, white
+
+{txt}White's test
+H0: Homoskedasticity
+Ha: Unrestricted heteroskedasticity
+
+{ralign 11:chi2({res:76})} = {res}{ralign 6:168.18}
+{txt}{ralign 11:Prob > chi2} = {res}{ralign 6:0.0000}
+
+{txt}Cameron & Trivedi's decomposition of IM-test
+
+{hline 21}{c TT}{hline 28}
+{ralign 20:Source} {c |}       chi2     df         p
+{hline 21}{c +}{hline 28}
+{ralign 20:Heteroskedasticity} {c |}{res}     168.18     76    0.0000
+{txt}{ralign 20:Skewness} {c |}{res}      17.13     11    0.1042
+{txt}{ralign 20:Kurtosis} {c |}{res}       9.52      1    0.0020
+{txt}{hline 21}{c +}{hline 28}
+{ralign 20:Total} {c |}{res}     194.83     88    0.0000
+{txt}{hline 21}{c BT}{hline 28}
+
+{com}. 
+. //*#############################################################################
+. //* C.
+. //*#############################################################################
+. 
+. clear all
+{res}{txt}
+{com}. use 1_data\dataset_2.dta
+{txt}
+{com}. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}czone {c |}{res}     23,770    21937.98    11352.08        100      39400
+{txt}d_yrwag~2011 {c |}{res}     23,770    .0813208    .6081289  -4.947901   4.888123
+{txt}{space 2}state_code {c |}{res}     23,770     24.8496    13.81532          1         48
+{txt}expos_to_r~s {c |}{res}     23,770    1.842783    1.157471   .4188264   10.26309
+{txt}{space 3}education {c |}{res}     23,770    2.812873    1.318574          1          5
+{txt}{hline 13}{c +}{hline 57}
+{space 8}race {c |}{res}     23,770    3.287042    1.424595          1          5
+{txt}{space 6}female {c |}{res}     23,770    .4982751    .5000075          0          1
+{txt}
+{com}. 
+. //*=============================================================================
+. //* C.1. Creating a dummy variable for whites.
+. //*=============================================================================
+. 
+. codebook race
+
+{txt}{hline}
+{res}race{right:(unlabeled)}
+{txt}{hline}
+
+{col 19}Type: Numeric ({res}long{txt})
+{ralign 22:Label}: {res:race_num}
+
+{col 18}Range: [{res}1{txt},{res}5{txt}]{col 55}Units: {res}1
+{col 10}{txt}Unique values: {res}5{col 51}{txt}Missing .: {res}0{txt}/{res}23,770
+
+{txt}{col 13}Tabulation: Freq.   Numeric  Label
+{col 20}{res}     3,347{col 32}       1{col 42}{txt}asian
+{col 20}{res}     4,426{col 32}       2{col 42}{txt}black
+{col 20}{res}     5,274{col 32}       3{col 42}{txt}hispanic
+{col 20}{res}     3,503{col 32}       4{col 42}{txt}other
+{col 20}{res}     7,220{col 32}       5{col 42}{txt}white
+
+{com}. gen white = 0 if race != 5
+{txt}(7,220 missing values generated)
+
+{com}. replace white = 1 if race == 5
+{txt}(7,220 real changes made)
+
+{com}. tab race white
+
+           {txt}{c |}         white
+      race {c |}         0          1 {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+     asian {c |}{res}     3,347          0 {txt}{c |}{res}     3,347 
+{txt}     black {c |}{res}     4,426          0 {txt}{c |}{res}     4,426 
+{txt}  hispanic {c |}{res}     5,274          0 {txt}{c |}{res}     5,274 
+{txt}     other {c |}{res}     3,503          0 {txt}{c |}{res}     3,503 
+{txt}     white {c |}{res}         0      7,220 {txt}{c |}{res}     7,220 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res}    16,550      7,220 {txt}{c |}{res}    23,770 
+{txt}
+{com}. 
+. //*=============================================================================
+. //* C.2. Regression.
+. //*=============================================================================
+. 
+. reg d_yrwage_ln_1990_2011 c.expos_to_robots##i.female white##i.education, rob
+
+{txt}Linear regression                               Number of obs     = {res}    23,770
+                                                {txt}F(12, 23757)      =  {res}   189.29
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.0368
+                                                {txt}Root MSE          =    {res} .59698
+
+{txt}{hline 25}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 26}{c |}{col 38}    Robust
+{col 1}   d_yrwage_ln_1990_2011{col 26}{c |} Coefficient{col 38}  std. err.{col 50}      t{col 58}   P>|t|{col 66}     [95% con{col 79}f. interval]
+{hline 25}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}expos_to_robots {c |}{col 26}{res}{space 2}-.0452585{col 38}{space 2} .0044846{col 49}{space 1}  -10.09{col 58}{space 3}0.000{col 66}{space 4}-.0540486{col 79}{space 3}-.0364685
+{txt}{space 16}1.female {c |}{col 26}{res}{space 2} .1428625{col 38}{space 2} .0140142{col 49}{space 1}   10.19{col 58}{space 3}0.000{col 66}{space 4} .1153937{col 79}{space 3} .1703312
+{txt}{space 24} {c |}
+female#c.expos_to_robots {c |}
+{space 22}1  {c |}{col 26}{res}{space 2} .0078448{col 38}{space 2} .0063929{col 49}{space 1}    1.23{col 58}{space 3}0.220{col 66}{space 4}-.0046856{col 79}{space 3} .0203752
+{txt}{space 24} {c |}
+{space 17}1.white {c |}{col 26}{res}{space 2}-.0301436{col 38}{space 2} .0146348{col 49}{space 1}   -2.06{col 58}{space 3}0.039{col 66}{space 4}-.0588287{col 79}{space 3}-.0014585
+{txt}{space 24} {c |}
+{space 15}education {c |}
+{space 12}high school  {c |}{col 26}{res}{space 2}-.0310826{col 38}{space 2} .0167027{col 49}{space 1}   -1.86{col 58}{space 3}0.063{col 66}{space 4} -.063821{col 79}{space 3} .0016558
+{txt}{space 11}some college  {c |}{col 26}{res}{space 2}-.0251477{col 38}{space 2} .0171907{col 49}{space 1}   -1.46{col 58}{space 3}0.144{col 66}{space 4}-.0588425{col 79}{space 3} .0085471
+{txt}{space 16}college  {c |}{col 26}{res}{space 2} .1015417{col 38}{space 2} .0191859{col 49}{space 1}    5.29{col 58}{space 3}0.000{col 66}{space 4} .0639361{col 79}{space 3} .1391472
+{txt}{space 17}master  {c |}{col 26}{res}{space 2} .1624391{col 38}{space 2} .0202855{col 49}{space 1}    8.01{col 58}{space 3}0.000{col 66}{space 4} .1226782{col 79}{space 3} .2022001
+{txt}{space 24} {c |}
+{space 9}white#education {c |}
+{space 10}1#high school  {c |}{col 26}{res}{space 2} .0469742{col 38}{space 2} .0180229{col 49}{space 1}    2.61{col 58}{space 3}0.009{col 66}{space 4}  .011648{col 79}{space 3} .0823003
+{txt}{space 9}1#some college  {c |}{col 26}{res}{space 2}  .104628{col 38}{space 2} .0184406{col 49}{space 1}    5.67{col 58}{space 3}0.000{col 66}{space 4} .0684833{col 79}{space 3} .1407727
+{txt}{space 14}1#college  {c |}{col 26}{res}{space 2} .0593417{col 38}{space 2} .0204027{col 49}{space 1}    2.91{col 58}{space 3}0.004{col 66}{space 4} .0193511{col 79}{space 3} .0993323
+{txt}{space 15}1#master  {c |}{col 26}{res}{space 2} .0211344{col 38}{space 2} .0217293{col 49}{space 1}    0.97{col 58}{space 3}0.331{col 66}{space 4}-.0214564{col 79}{space 3} .0637251
+{txt}{space 24} {c |}
+{space 19}_cons {c |}{col 26}{res}{space 2} .0541556{col 38}{space 2} .0160536{col 49}{space 1}    3.37{col 58}{space 3}0.001{col 66}{space 4} .0226895{col 79}{space 3} .0856218
+{txt}{hline 25}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg4, tex replace
+{txt}{stata `"shellout using `"5_tables\reg4.tex"'"':5_tables\reg4.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg4.txt""':seeout}
+
+{com}. 
+. //*=============================================================================
+. //* C.3. Chow test for testing differences between whites and non-whites.
+. //*=============================================================================
+. 
+. //* Not included.
+. 
+. //*=============================================================================
+. //* C.4 Test of the difference in marginal effect of robots on men and women.
+. //*=============================================================================
+. 
+. test 1.female#c.expos_to_robots
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}1.female#c.expos_to_robots = 0{p_end}
+
+{txt}       F(  1, 23757) ={res}    1.51
+{txt}{col 13}Prob > F ={res}    0.2198
+{txt}
+{com}. 
+. //*=============================================================================
+. //* C.5. Regression with dummy variables for education levels.
+. //*=============================================================================
+. 
+. tabulate education, generate(edu)
+
+            {txt}education {c |}      Freq.     Percent        Cum.
+{hline 22}{c +}{hline 35}
+less than high school {c |}{res}      4,810       20.24       20.24
+{txt}          high school {c |}{res}      5,643       23.74       43.98
+{txt}         some college {c |}{res}      5,732       24.11       68.09
+{txt}              college {c |}{res}      4,355       18.32       86.41
+{txt}               master {c |}{res}      3,230       13.59      100.00
+{txt}{hline 22}{c +}{hline 35}
+                Total {c |}{res}     23,770      100.00
+{txt}
+{com}. reg d_yrwage_ln_1990_2011 expos_to_robots female edu2 edu3 edu4 edu5 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}    23,770
+{txt}{hline 13}{c +}{hline 34}   F(6, 23763)     = {res}   147.25
+{txt}       Model {c |} {res} 315.098903         6  52.5164838   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  8475.1713    23,763  .356654097   {txt}R-squared       ={res}    0.0358
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0356
+{txt}       Total {c |} {res}  8790.2702    23,769  .369820783   {txt}Root MSE        =   {res} .59721
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}d_yrwage_l~2011{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+expos_to_robots {c |}{col 17}{res}{space 2}-.0414809{col 29}{space 2} .0033469{col 40}{space 1}  -12.39{col 49}{space 3}0.000{col 57}{space 4} -.048041{col 70}{space 3}-.0349208
+{txt}{space 9}female {c |}{col 17}{res}{space 2} .1572163{col 29}{space 2} .0077475{col 40}{space 1}   20.29{col 49}{space 3}0.000{col 57}{space 4} .1420307{col 70}{space 3} .1724019
+{txt}{space 11}edu2 {c |}{col 17}{res}{space 2}-.0176851{col 29}{space 2} .0117199{col 40}{space 1}   -1.51{col 49}{space 3}0.131{col 57}{space 4}-.0406569{col 70}{space 3} .0052867
+{txt}{space 11}edu3 {c |}{col 17}{res}{space 2} .0027235{col 29}{space 2} .0116779{col 40}{space 1}    0.23{col 49}{space 3}0.816{col 57}{space 4}-.0201659{col 70}{space 3} .0256129
+{txt}{space 11}edu4 {c |}{col 17}{res}{space 2} .1202807{col 29}{space 2} .0124924{col 40}{space 1}    9.63{col 49}{space 3}0.000{col 57}{space 4} .0957947{col 70}{space 3} .1447667
+{txt}{space 11}edu5 {c |}{col 17}{res}{space 2} .1674346{col 29}{space 2} .0135864{col 40}{space 1}   12.32{col 49}{space 3}0.000{col 57}{space 4} .1408045{col 70}{space 3} .1940648
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2} .0381767{col 29}{space 2} .0112288{col 40}{space 1}    3.40{col 49}{space 3}0.001{col 57}{space 4} .0161675{col 70}{space 3} .0601859
+{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. //*=============================================================================
+. //* C.6. Regression with interaction between robots and dummies for education.
+. //*=============================================================================
+. 
+. reg d_yrwage_ln_1990_2011 c.expos_to_robots##i.education female race, rob
+
+{txt}Linear regression                               Number of obs     = {res}    23,770
+                                                {txt}F(11, 23758)      =  {res}    89.82
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.0370
+                                                {txt}Root MSE          =    {res} .59693
+
+{txt}{hline 28}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 29}{c |}{col 41}    Robust
+{col 1}      d_yrwage_ln_1990_2011{col 29}{c |} Coefficient{col 41}  std. err.{col 53}      t{col 61}   P>|t|{col 69}     [95% con{col 82}f. interval]
+{hline 28}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}expos_to_robots {c |}{col 29}{res}{space 2}-.0557862{col 41}{space 2} .0083043{col 52}{space 1}   -6.72{col 61}{space 3}0.000{col 69}{space 4}-.0720631{col 82}{space 3}-.0395093
+{txt}{space 27} {c |}
+{space 18}education {c |}
+{space 15}high school  {c |}{col 29}{res}{space 2}-.0100199{col 41}{space 2} .0223958{col 52}{space 1}   -0.45{col 61}{space 3}0.655{col 69}{space 4}-.0539171{col 82}{space 3} .0338772
+{txt}{space 14}some college  {c |}{col 29}{res}{space 2}-.0223304{col 41}{space 2} .0226929{col 52}{space 1}   -0.98{col 61}{space 3}0.325{col 69}{space 4}-.0668099{col 82}{space 3} .0221491
+{txt}{space 19}college  {c |}{col 29}{res}{space 2} .0529709{col 41}{space 2} .0248537{col 52}{space 1}    2.13{col 61}{space 3}0.033{col 69}{space 4} .0042561{col 82}{space 3} .1016858
+{txt}{space 20}master  {c |}{col 29}{res}{space 2} .0995622{col 41}{space 2} .0233687{col 52}{space 1}    4.26{col 61}{space 3}0.000{col 69}{space 4} .0537581{col 82}{space 3} .1453663
+{txt}{space 27} {c |}
+education#c.expos_to_robots {c |}
+{space 15}high school  {c |}{col 29}{res}{space 2}-.0037766{col 41}{space 2} .0103959{col 52}{space 1}   -0.36{col 61}{space 3}0.716{col 69}{space 4}-.0241532{col 82}{space 3}    .0166
+{txt}{space 14}some college  {c |}{col 29}{res}{space 2} .0140973{col 41}{space 2} .0102976{col 52}{space 1}    1.37{col 61}{space 3}0.171{col 69}{space 4}-.0060867{col 82}{space 3} .0342813
+{txt}{space 19}college  {c |}{col 29}{res}{space 2} .0367525{col 41}{space 2} .0115503{col 52}{space 1}    3.18{col 61}{space 3}0.001{col 69}{space 4} .0141132{col 82}{space 3} .0593917
+{txt}{space 20}master  {c |}{col 29}{res}{space 2} .0363174{col 41}{space 2} .0108219{col 52}{space 1}    3.36{col 61}{space 3}0.001{col 69}{space 4} .0151058{col 82}{space 3} .0575291
+{txt}{space 27} {c |}
+{space 21}female {c |}{col 29}{res}{space 2} .1573782{col 41}{space 2} .0077434{col 52}{space 1}   20.32{col 61}{space 3}0.000{col 69}{space 4} .1422006{col 82}{space 3} .1725558
+{txt}{space 23}race {c |}{col 29}{res}{space 2} .0040804{col 41}{space 2} .0026976{col 52}{space 1}    1.51{col 61}{space 3}0.130{col 69}{space 4}-.0012071{col 82}{space 3} .0093679
+{txt}{space 22}_cons {c |}{col 29}{res}{space 2} .0505455{col 41}{space 2} .0214288{col 52}{space 1}    2.36{col 61}{space 3}0.018{col 69}{space 4} .0085436{col 82}{space 3} .0925473
+{txt}{hline 28}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 5_tables\reg5, tex replace
+{txt}{stata `"shellout using `"5_tables\reg5.tex"'"':5_tables\reg5.tex}
+{browse `"A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2"' :dir}{com} : {txt}{stata `"seeout using "5_tables\reg5.txt""':seeout}
+
+{com}. 
+. //*#############################################################################
+. //* n. Close log.
+. //*#############################################################################
+. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}A:\_maestria_unibo_(operacional)\4_econometrics_1\4_problem_sets\2_ps2\3_log\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 Oct 2021, 19:59:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
