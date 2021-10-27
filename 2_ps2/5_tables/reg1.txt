@@ -1,0 +1,12 @@
+	(1)
+VARIABLES	d_emppriv_1990_2011
+	
+expos_to_robots	-1.091***
+	(0.110)
+Constant	2.775***
+	(0.234)
+	
+Observations	722
+R-squared	0.142
+Robust standard errors in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	

@@ -1,0 +1,30 @@
+	(1)
+VARIABLES	d_emppriv_1990_2011
+	
+expos_to_robots	-0.556***
+	(0.0888)
+ipums_logpop_1990	-0.447***
+	(0.0894)
+ipums_female_1990	0.634
+	(15.73)
+ipums_above65_1990	11.58**
+	(5.439)
+ipums_somecollege_1990	10.59***
+	(3.289)
+ipums_college_1990	23.29***
+	(6.426)
+ipums_masters_1990	-53.27***
+	(11.69)
+ipums_black_1990	-5.124***
+	(1.047)
+ipums_hispanic_1990	1.879***
+	(0.687)
+ipums_asian_1990	-26.92***
+	(8.414)
+Constant	2.293
+	(7.817)
+	
+Observations	722
+R-squared	0.385
+Robust standard errors in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	
